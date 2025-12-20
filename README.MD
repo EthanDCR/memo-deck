@@ -1,1 +1,0 @@
-memodeck readme
