@@ -22,7 +22,9 @@ function App() {
       setShowNotesBox(true);
       setFiles(systemFiles)
       if (systemFiles.length != 0) {
+        setShowSelectFiles(false)
         setShowNotesBox(true)
+
       }
     }
     catch (error) {
