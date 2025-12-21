@@ -49,3 +49,8 @@ wails.json.backup
 
 # Test files (optional - uncomment if you don't want to track test files)
 # testFiles/
+
+# Claude Code
+claude.md
+claude-*.md
+.claude/

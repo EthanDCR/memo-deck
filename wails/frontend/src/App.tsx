@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import styles from "./app.module.css"
 import { GetFilePaths } from "../wailsjs/go/main/App"
 
@@ -11,6 +11,7 @@ function App() {
   const [files, setFiles] = useState<string[]>([])
   const [showSelectFiles, setShowSelectFiles] = useState<boolean>(true)
   const [count, setCount] = useState<number>(30)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
 
   const getFiles = async () => {
@@ -35,24 +36,36 @@ function App() {
   }
 
   const handleCount = (operator: string) => {
+    setCount(prevCount => {
+      if (operator === "-") {
+        return prevCount <= 10 ? 10 : prevCount - 1
+      } else {
+        return prevCount >= 100 ? 100 : prevCount + 1
+      }
+    })
+  }
 
-    switch (operator) {
-      case "-":
-        if (count <= 0) {
-          break;
-        } else {
-          setCount(count - 1)
-          break;
-        }
-      case "+":
-        if (count >= 100) {
-          break;
-        } else {
-          setCount(count + 1)
-          break;
-        }
+  const handleMouseDown = (operator: string) => {
+    handleCount(operator)
+    intervalRef.current = setInterval(() => {
+      handleCount(operator)
+    }, 100)
+  }
+
+  const handleMouseUp = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
     }
   }
+
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+    }
+  }, [])
 
 
 
@@ -92,9 +105,21 @@ function App() {
               onChange={(e) => setNotes(e.target.value)} rows={20} cols={80}></textarea>
             <div className={styles.submitContainer}>
               <div className={styles.counter}>
-                <button onClick={() => handleCount("-")}>🡸</button>
-                <button onClick={() => handleCount("+")}>🡺</button>
+                <button
+                  onMouseDown={() => handleMouseDown("-")}
+                  onMouseUp={handleMouseUp}
+                  onMouseLeave={handleMouseUp}
+                  onTouchStart={() => handleMouseDown("-")}
+                  onTouchEnd={handleMouseUp}
+                >🡸</button>
                 <p>{count}</p>
+                <button
+                  onMouseDown={() => handleMouseDown("+")}
+                  onMouseUp={handleMouseUp}
+                  onMouseLeave={handleMouseUp}
+                  onTouchStart={() => handleMouseDown("+")}
+                  onTouchEnd={handleMouseUp}
+                >🡺</button>
               </div>
               <button className={styles.contextBtn}>Submit Context</button>
             </div>

@@ -83,13 +83,11 @@
     resize: vertical;
     font-family: inherit;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .contextSection textarea:focus {
     outline: none;
-    border-color: var(--accent-purple);
-    box-shadow: 0 4px 24px rgba(168, 85, 247, 0.3);
+    border-color: var(--text-secondary);
     background-color: var(--bg-card);
 }
 
@@ -107,6 +105,16 @@
     font-size: 1.125rem;
 }
 
+.submitContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
 .counter {
     background-color: var(--bg-secondary);
     border: 1px solid var(--border-color);
@@ -116,7 +124,6 @@
     gap: 0.5rem;
     padding: 0.5rem;
     height: 3.75rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .counter button {
@@ -127,12 +134,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--bg-card);
-    box-shadow: none;
 }
 
 .counter button:hover {
-    background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+    background-color: var(--bg-hover);
 }
 
 .counter p {
@@ -144,16 +149,6 @@
     text-align: center;
 }
 
-.submitContainer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-}
-
 .selectedFilesMap {
     margin: 1.5rem 0;
     padding: 1.75rem;
@@ -162,7 +157,6 @@
     border: 1px solid var(--border-color);
     width: 90%;
     max-width: 700px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .filesGrid {
@@ -184,8 +178,7 @@
 
 .filesGrid div:hover {
     background-color: var(--bg-hover);
-    border-color: var(--accent-purple);
-    transform: translateY(-2px);
+    border-color: var(--text-muted);
 }
 
 .contextSection {
