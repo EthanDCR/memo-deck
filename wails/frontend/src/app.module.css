@@ -50,28 +50,27 @@
 }
 
 .page button {
-    background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 14px 32px;
-    font-size: 16px;
-    font-weight: 600;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: 500;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4);
+    transition: all 0.15s ease;
 }
 
 .page button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(168, 85, 247, 0.6);
+    background-color: var(--bg-card);
+    border-color: var(--text-secondary);
 }
 
 .page button:active {
-    transform: translateY(0);
+    background-color: var(--bg-hover);
 }
 
-.page textarea {
+.contextSection textarea {
     font-size: 0.9375rem;
     font-weight: 400;
     background-color: var(--bg-secondary);
@@ -79,8 +78,7 @@
     border: 1px solid var(--border-color);
     border-radius: 1rem;
     padding: 1.5rem;
-    width: 90%;
-    max-width: 700px;
+    width: 100%;
     min-height: clamp(300px, 40vh, 500px);
     resize: vertical;
     font-family: inherit;
@@ -88,14 +86,14 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.page textarea:focus {
+.contextSection textarea:focus {
     outline: none;
     border-color: var(--accent-purple);
     box-shadow: 0 4px 24px rgba(168, 85, 247, 0.3);
     background-color: var(--bg-card);
 }
 
-.page textarea::placeholder {
+.contextSection textarea::placeholder {
     font-size: 0.875rem;
     font-weight: 400;
     line-height: 1.8;
@@ -153,8 +151,7 @@
     margin-top: 1.5rem;
     justify-content: center;
     align-items: center;
-    width: 90%;
-    max-width: 700px;
+    width: 100%;
 }
 
 .selectedFilesMap {
