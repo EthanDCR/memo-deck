@@ -68,13 +68,13 @@ function App() {
           <li>.pdf</li>
         </ul>
         :
-        <div>
-          <p>Selected files: </p>
-          <div className={styles.selectedFilesMap}>
+        <div className={styles.selectedFilesMap}>
+          <div className={styles.sectionHeader}>Selected Files</div>
+          <div className={styles.filesGrid}>
             {files.map((file, i) => {
               const parts = file.split("/")
               const final = parts.pop() || file
-              return <div key={i}>- {final}</div>
+              return <div key={i}>{final}</div>
             })}
           </div>
         </div>
@@ -86,11 +86,10 @@ function App() {
         }
 
         {showNotesBox &&
-          <div>
-            <h3>Optional - Provide some context to the LLM </h3>
-            <textarea placeholder=" eg. I have a midterm on Friday about these PDFs. Generate cards that focus on
-            definitions and historical dates, and skip the introductory sections."
-              onChange={(e) => setNotes(e.target.value)} rows={30} cols={80}></textarea>
+          <div className={styles.contextSection}>
+            <div className={styles.sectionHeader}>Context (Optional)</div>
+            <textarea placeholder="e.g. I have a midterm on Friday about these PDFs. Generate cards that focus on definitions and historical dates, and skip the introductory sections."
+              onChange={(e) => setNotes(e.target.value)} rows={20} cols={80}></textarea>
             <div className={styles.submitContainer}>
               <div className={styles.counter}>
                 <button onClick={() => handleCount("-")}>🡸</button>
