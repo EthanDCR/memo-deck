@@ -10,6 +10,8 @@ function App() {
   const [notes, setNotes] = useState<string | null>(null)
   const [files, setFiles] = useState<string[]>([])
   const [showSelectFiles, setShowSelectFiles] = useState<boolean>(true)
+  const [count, setCount] = useState<number>(30)
+
 
   const getFiles = async () => {
     try {
@@ -31,6 +33,28 @@ function App() {
       console.error(error, "error getting files")
     }
   }
+
+  const handleCount = (operator: string) => {
+
+    switch (operator) {
+      case "-":
+        if (count <= 0) {
+          break;
+        } else {
+          setCount(count - 1)
+          break;
+        }
+      case "+":
+        if (count >= 100) {
+          break;
+        } else {
+          setCount(count + 1)
+          break;
+        }
+    }
+  }
+
+
 
   return (
     <div className={styles.page}>
@@ -67,7 +91,12 @@ function App() {
             <textarea placeholder=" eg. I have a midterm on Friday about these PDFs. Generate cards that focus on
             definitions and historical dates, and skip the introductory sections."
               onChange={(e) => setNotes(e.target.value)} rows={30} cols={80}></textarea>
-            <div>
+            <div className={styles.submitContainer}>
+              <div className={styles.counter}>
+                <button onClick={() => handleCount("-")}>🡸</button>
+                <button onClick={() => handleCount("+")}>🡺</button>
+                <p>{count}</p>
+              </div>
               <button className={styles.contextBtn}>Submit Context</button>
             </div>
           </div>}
