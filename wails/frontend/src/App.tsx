@@ -1,8 +1,6 @@
-import { useEffect, useState, useRef } from "react"
+import { useState } from "react"
 import styles from "./app.module.css"
 import { GetFilePaths } from "../wailsjs/go/main/App"
-
-
 
 function App() {
 
@@ -11,7 +9,6 @@ function App() {
   const [files, setFiles] = useState<string[]>([])
   const [showSelectFiles, setShowSelectFiles] = useState<boolean>(true)
   const [count, setCount] = useState<number>(30)
-  const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
 
   const getFiles = async () => {
@@ -27,7 +24,6 @@ function App() {
       if (systemFiles.length != 0) {
         setShowSelectFiles(false)
         setShowNotesBox(true)
-
       }
     }
     catch (error) {
@@ -36,42 +32,54 @@ function App() {
   }
 
   const handleCount = (operator: string) => {
-    setCount(prevCount => {
-      if (operator === "-") {
-        return prevCount <= 10 ? 10 : prevCount - 1
-      } else {
-        return prevCount >= 100 ? 100 : prevCount + 1
-      }
-    })
-  }
+    switch (operator) {
+      case "+":
+        if (count >= 50) {
+          break;
+        }
+        setCount(count + 1)
+        break;
 
-  const handleMouseDown = (operator: string) => {
-    handleCount(operator)
-    intervalRef.current = setInterval(() => {
-      handleCount(operator)
-    }, 100)
-  }
-
-  const handleMouseUp = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current)
-      intervalRef.current = null
+      case "-":
+        if (count <= 0) {
+          break;
+        }
+        setCount(count - 1)
+        break;
     }
   }
 
-  useEffect(() => {
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-      }
+
+  //files[] 
+  //notes/context | null
+  //card count
+
+
+  interface Context {
+    files: [],
+    notes: string | null,
+    count: number,
+  }
+
+  const handleSubmit = () => {
+
+
+    const context: Context = {
+      files: files,
+      notes: notes,
+      count: count,
     }
-  }, [])
 
+    console.log("made context object, object: \n" + context.notes)
 
+  }
 
   return (
     <div className={styles.page}>
-      <h1>MeMoDeck</h1>
+      <div className={styles.headerStuff}>
+        <h1>MeMoDeck</h1>
+        <img className={styles.studyGuy} src="../src/assets/images/studyGuy.png" />
+      </div>
       {files.length <= 0 ?
         <ul>
           <li><strong>Supported File Types: </strong></li>
@@ -105,23 +113,11 @@ function App() {
               onChange={(e) => setNotes(e.target.value)} rows={20} cols={80}></textarea>
             <div className={styles.submitContainer}>
               <div className={styles.counter}>
-                <button
-                  onMouseDown={() => handleMouseDown("-")}
-                  onMouseUp={handleMouseUp}
-                  onMouseLeave={handleMouseUp}
-                  onTouchStart={() => handleMouseDown("-")}
-                  onTouchEnd={handleMouseUp}
-                >🡸</button>
+                <button onClick={() => handleCount("-")}>🡸</button>
                 <p>{count}</p>
-                <button
-                  onMouseDown={() => handleMouseDown("+")}
-                  onMouseUp={handleMouseUp}
-                  onMouseLeave={handleMouseUp}
-                  onTouchStart={() => handleMouseDown("+")}
-                  onTouchEnd={handleMouseUp}
-                >🡺</button>
+                <button onClick={() => handleCount("+")}>🡺</button>
               </div>
-              <button className={styles.contextBtn}>Submit Context</button>
+              <button onClick={() => handleSubmit()} className={styles.contextBtn}>Submit Context</button>
             </div>
           </div>}
 
