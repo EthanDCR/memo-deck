@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"time"
 	"wails/utils"
 )
 
@@ -57,7 +58,7 @@ func (a *App) SendContext(ctx Context) {
 	}
 
 	chatRequest := ChatRequest{
-		Model: "phi",
+		Model: "llama3.2:3b",
 		Messages: []Message{
 			{Role: "system", Content: systemPrompt},
 			{Role: "user", Content: fileContents},
@@ -70,11 +71,19 @@ func (a *App) SendContext(ctx Context) {
 		fmt.Printf("couln't convert context struct to json")
 	}
 	fmt.Printf("sending JSON:\n%s\n", string(jsonData))
-	res, err := http.Post("http://localhost:11434/api/chat", "application/json", bytes.NewBuffer(jsonData))
+
+	// Create HTTP client with timeout
+	client := &http.Client{
+		Timeout: 5 * time.Minute,
+	}
+
+	res, err := client.Post("http://localhost:11434/api/chat", "application/json", bytes.NewBuffer(jsonData))
 	if err != nil {
-		fmt.Printf("error posting: %v", err)
+		fmt.Printf("Error posting: %v\n", err)
+		return
 	}
 	defer res.Body.Close()
+
 	fmt.Printf("Status Code: %d\n", res.StatusCode)
 
 	bodyBytes, err := io.ReadAll(res.Body)
