@@ -1,0 +1,32 @@
+The Science of Renewable Energy
+
+Energy is the ability to do work, and it exists in many forms, including mechanical, radiant, 
+chemical, and electrical. Sources of energy are generally categorized into two groups: 
+renewable and non-renewable.
+
+1. Solar Energy: 
+Radiant energy from the sun is captured using photovoltaic (PV) cells. These cells 
+transform sunlight directly into electricity. A major advantage of solar power is that 
+it is inexhaustible, although it is dependent on weather conditions and time of day.
+
+2. Wind Power: 
+Wind turbines use the kinetic energy of moving air to spin a generator. This generator 
+transforms mechanical energy into electrical energy. An instrument called an 
+anemometer is used to measure the velocity of the wind to determine the best 
+placement for these turbines.
+
+3. Hydropower: 
+This is the most prevalent renewable energy source globally, accounting for nearly 60% 
+of renewable electricity. It relies on the flow of water (rivers or dams) to turn 
+turbines.
+
+4. Important Vocabulary:
+- Convection: The transfer of thermal energy in a fluid (gas or liquid) by currents.
+- Generator: A device that converts mechanical energy into electrical energy.
+- Fossil Fuels: Non-renewable resources like coal, oil, and natural gas which currently 
+  provide 80-85% of the world's energy.
+
+Statistics: 
+While the U.S. has less than 5% of the world's population, it consumes approximately 
+17% of the world's energy. Transitioning to renewable technologies could save an 
+estimated $12 trillion globally by 2050.

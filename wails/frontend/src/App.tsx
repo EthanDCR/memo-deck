@@ -1,11 +1,13 @@
 import { useState } from "react"
 import styles from "./app.module.css"
 import { GetFilePaths } from "../wailsjs/go/main/App"
+import { SendContext } from "../wailsjs/go/main/App"
+
 
 function App() {
 
   const [showNotesBox, setShowNotesBox] = useState<boolean>(false)
-  const [notes, setNotes] = useState<string | null>(null)
+  const [notes, setNotes] = useState<string>("")
   const [files, setFiles] = useState<string[]>([])
   const [showSelectFiles, setShowSelectFiles] = useState<boolean>(true)
   const [count, setCount] = useState<number>(30)
@@ -49,29 +51,21 @@ function App() {
     }
   }
 
-
-  //files[] 
-  //notes/context | null
-  //card count
-
-
   interface Context {
-    files: [],
-    notes: string | null,
+    files: string[],
+    notes: string | "",
     count: number,
   }
 
   const handleSubmit = () => {
-
-
     const context: Context = {
       files: files,
       notes: notes,
       count: count,
     }
 
-    console.log("made context object, object: \n" + context.notes)
-
+    SendContext(context)
+    console.log("made context object, object: \n" + context.notes, context.files, context.count)
   }
 
   return (
