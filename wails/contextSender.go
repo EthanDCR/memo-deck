@@ -28,16 +28,6 @@ type ChatRequest struct {
 	Stream   bool      `json:"stream"`
 }
 
-type Deck struct {
-	Name       string
-	FlashCards []FlashCard
-}
-
-type FlashCard struct {
-	Front string `json:"front"`
-	Back  string `json:"back"`
-}
-
 type ChatResponse struct {
 	Model          string  `json:"model"`
 	Created_at     string  `json:"created_at"`
@@ -108,7 +98,7 @@ func (a *App) SendContext(ctx Context) {
 	var response ChatResponse
 	err = json.Unmarshal(bodyBytes, &response)
 	if err != nil {
-		fmt.Printf("error converting response bytes into json,")
+		fmt.Printf("error converting response bytes into json")
 	}
 
 	fmt.Printf("loggin the new json data here: \n")
