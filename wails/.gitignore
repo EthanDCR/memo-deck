@@ -3,6 +3,9 @@ build/bin
 build/bin/
 *.syso
 
+todo*
+
+
 # Frontend build
 frontend/dist
 frontend/node_modules
