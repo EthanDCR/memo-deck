@@ -70,7 +70,7 @@
     background-color: var(--bg-hover);
 }
 
-.contextSection textarea {
+ .notesTextArea {
     font-size: 0.9375rem;
     font-weight: 400;
     background-color: var(--bg-secondary);
@@ -79,8 +79,7 @@
     border-radius: 1rem;
     padding: 1.5rem;
     width: 100%;
-    min-height: clamp(300px, 40vh, 500px);
-    resize: vertical;
+    resize: none;
     font-family: inherit;
     transition: all 0.2s ease;
 }
@@ -217,3 +216,37 @@
   width: 150px;
   height: 150px;
 }
+
+
+.deckNameInput {
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.deckNameTextArea {
+    font-size: 0.9375rem;
+    font-weight: 400;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
+    width: 100%;
+    min-height: 3.5rem;
+    resize: none;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.deckNameTextArea:focus {
+    outline: none;
+    border-color: var(--text-secondary);
+    background-color: var(--bg-card);
+}
+
+.deckNameTextArea::placeholder {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--text-muted);
+}
+

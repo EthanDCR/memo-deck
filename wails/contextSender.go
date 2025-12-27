@@ -7,11 +7,11 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"time"
 	"wails/utils"
 )
 
 type Context struct {
+	Name  string   `json:"name"`
 	Files []string `json:"files"`
 	Notes string   `json:"notes"`
 	Count int      `json:"count"`
@@ -28,14 +28,30 @@ type ChatRequest struct {
 	Stream   bool      `json:"stream"`
 }
 
+type Deck struct {
+	Name       string
+	FlashCards []FlashCard
+}
+
+type FlashCard struct {
+	Front string `json:"front"`
+	Back  string `json:"back"`
+}
+
+type ChatResponse struct {
+	Model          string  `json:"model"`
+	Created_at     string  `json:"created_at"`
+	Message        Message `json:"message"`
+	Total_duration int     `json:"total_duration"`
+	Done           bool    `json:"done"`
+}
+
 func (a *App) SendContext(ctx Context) {
-	fmt.Printf("send context called ! ---------------")
 
 	if len(ctx.Files) <= 0 {
 		fmt.Printf("files empty\n")
 	}
 
-	// count recived number of files
 	count := 0
 	for _, file := range ctx.Files {
 		fmt.Printf(" content %s\n", string(file))
@@ -49,7 +65,7 @@ func (a *App) SendContext(ctx Context) {
 		if err != nil {
 			fmt.Printf("error reading %s: %v\n", filePath, err)
 		}
-		fileContents += string(data)
+		fileContents = fileContents + string(data)
 	}
 
 	systemPrompt, err := utils.GetSystemPrompt(ctx.Count)
@@ -58,7 +74,7 @@ func (a *App) SendContext(ctx Context) {
 	}
 
 	chatRequest := ChatRequest{
-		Model: "llama3.2:3b",
+		Model: "llama3.2:1b",
 		Messages: []Message{
 			{Role: "system", Content: systemPrompt},
 			{Role: "user", Content: fileContents},
@@ -72,12 +88,7 @@ func (a *App) SendContext(ctx Context) {
 	}
 	fmt.Printf("sending JSON:\n%s\n", string(jsonData))
 
-	// Create HTTP client with timeout
-	client := &http.Client{
-		Timeout: 5 * time.Minute,
-	}
-
-	res, err := client.Post("http://localhost:11434/api/chat", "application/json", bytes.NewBuffer(jsonData))
+	res, err := http.Post("http://localhost:11434/api/chat", "application/json", bytes.NewBuffer(jsonData))
 	if err != nil {
 		fmt.Printf("Error posting: %v\n", err)
 		return
@@ -90,8 +101,17 @@ func (a *App) SendContext(ctx Context) {
 	if err != nil {
 		fmt.Printf("error reading bytes from response body")
 	}
-	fmt.Printf("value: %v\n type: %T", res.Body, res.Body)
+
 	bodyString := string(bodyBytes)
 	fmt.Printf("response body string: %s", bodyString)
 
+	var response ChatResponse
+	err = json.Unmarshal(bodyBytes, &response)
+	if err != nil {
+		fmt.Printf("error converting response bytes into json,")
+	}
+
+	fmt.Printf("loggin the new json data here: \n")
+	fmt.Printf("Model: %v\n Created_at: %v\n Message: %v\n Total_duration: %v\n Done: %v\n", response.Model, response.Created_at,
+		response.Message, response.Total_duration, response.Done)
 }

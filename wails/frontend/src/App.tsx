@@ -11,7 +11,7 @@ function App() {
   const [files, setFiles] = useState<string[]>([])
   const [showSelectFiles, setShowSelectFiles] = useState<boolean>(true)
   const [count, setCount] = useState<number>(30)
-
+  const [deckName, setDeckName] = useState<string>("")
 
   const getFiles = async () => {
     try {
@@ -52,13 +52,25 @@ function App() {
   }
 
   interface Context {
+    name: string,
     files: string[],
     notes: string | "",
     count: number,
   }
 
+  interface Card {
+    front: string,
+    back: string,
+  }
+
+  interface Deck {
+    id: string,
+    cards: Card[],
+  }
+
   const handleSubmit = () => {
     const context: Context = {
+      name: deckName,
       files: files,
       notes: notes,
       count: count,
@@ -101,10 +113,19 @@ function App() {
         }
 
         {showNotesBox &&
+
           <div className={styles.contextSection}>
+            <div className={styles.deckNameInput}>
+              <div className={styles.sectionHeader}>Deck Name</div>
+              <textarea
+                className={styles.deckNameTextArea}
+                placeholder="e.g. Biology Midterm - Chapter 5"
+                onChange={(e) => setDeckName(e.target.value)}
+              ></textarea>
+            </div>
             <div className={styles.sectionHeader}>Context (Optional)</div>
-            <textarea placeholder="e.g. I have a midterm on Friday about these PDFs. Generate cards that focus on definitions and historical dates, and skip the introductory sections."
-              onChange={(e) => setNotes(e.target.value)} rows={20} cols={80}></textarea>
+            <textarea className={styles.notesTextArea} placeholder="e.g. I have a midterm on Friday about these PDFs. Generate cards that focus on definitions and historical dates, and skip the introductory sections."
+              onChange={(e) => setNotes(e.target.value)} rows={15} cols={80}></textarea>
             <div className={styles.submitContainer}>
               <div className={styles.counter}>
                 <button onClick={() => handleCount("-")}>🡸</button>

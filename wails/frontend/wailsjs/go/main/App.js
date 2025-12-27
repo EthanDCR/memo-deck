@@ -13,7 +13,3 @@ export function Greet(arg1) {
 export function SendContext(arg1) {
   return window['go']['main']['App']['SendContext'](arg1);
 }
-
-export function TestApi() {
-  return window['go']['main']['App']['TestApi']();
-}

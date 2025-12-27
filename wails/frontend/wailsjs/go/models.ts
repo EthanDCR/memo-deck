@@ -1,6 +1,7 @@
 export namespace main {
 	
 	export class Context {
+	    name: string;
 	    files: string[];
 	    notes: string;
 	    count: number;
@@ -11,6 +12,7 @@ export namespace main {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.name = source["name"];
 	        this.files = source["files"];
 	        this.notes = source["notes"];
 	        this.count = source["count"];
