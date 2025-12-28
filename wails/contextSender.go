@@ -101,7 +101,12 @@ func (a *App) SendContext(ctx Context) {
 		fmt.Printf("error converting response bytes into json")
 	}
 
-	fmt.Printf("loggin the new json data here: \n")
 	fmt.Printf("Model: %v\n Created_at: %v\n Message: %v\n Total_duration: %v\n Done: %v\n", response.Model, response.Created_at,
 		response.Message, response.Total_duration, response.Done)
+
+	message, err := WriteDeck(ctx.Name, response)
+	if err != nil {
+		fmt.Printf("error writing new deck: \n %v \n %v \n", message, err)
+	}
+	fmt.Printf(message, nil)
 }

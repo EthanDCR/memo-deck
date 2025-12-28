@@ -10,7 +10,7 @@ function App() {
   const [notes, setNotes] = useState<string>("")
   const [files, setFiles] = useState<string[]>([])
   const [showSelectFiles, setShowSelectFiles] = useState<boolean>(true)
-  const [count, setCount] = useState<number>(30)
+  const [count, setCount] = useState<number>(10)
   const [deckName, setDeckName] = useState<string>("")
 
   const getFiles = async () => {

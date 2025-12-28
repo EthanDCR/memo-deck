@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 type Deck struct {
@@ -17,41 +18,48 @@ type FlashCard struct {
 	Back  string `json:"back"`
 }
 
-func WriteDeck(name string, response ChatResponse) {
+func WriteDeck(name string, response ChatResponse) (message string, err error) {
 
 	configPath, err := os.UserConfigDir()
 	if err != nil {
-		fmt.Println("Critical: Could not find config directory")
-		return
+		return "could not find config directoy", err
 	}
+
+	jsonLeft := strings.Index(response.Message.Content, "[")
+	jsonRight := strings.LastIndex(response.Message.Content, "]")
+	jsonFinal := response.Message.Content[jsonLeft : jsonRight+1]
 
 	var cards []FlashCard
-	err = json.Unmarshal([]byte(response.Message.Content), &cards)
+	err = json.Unmarshal([]byte(jsonFinal), &cards)
 	if err != nil {
-		fmt.Printf("error converting json data into flashcard go objects\n Ai response was not valid json:\n%v\n", err)
+		return "\n Ai response was not valid json:\n%v\n", err
 	}
 
+	formattedName := strings.ReplaceAll(strings.TrimSpace(name), " ", "-")
+
 	finalDeck := Deck{
-		Name:       name,
+		Name:       formattedName,
 		FlashCards: cards,
 	}
 
 	deckBytes, err := json.MarshalIndent(finalDeck, "", "\t")
 	if err != nil {
-		fmt.Printf("Error converting json into bytes to write to file system: \n%v\n", err)
+		return "error converting json into bytes to write to file system", err
 	}
 
 	appDataPath := filepath.Join(configPath, "memoDeck")
 
 	err = os.MkdirAll(appDataPath, 0755)
 	if err != nil {
-		fmt.Printf("error creating directoy")
-		return
+		return "error creating new directory", err
 	}
+
+	fmt.Printf("new dir made: %s \n", appDataPath)
+
 	finalFilePath := filepath.Join(appDataPath, name+".json")
 	err = os.WriteFile(finalFilePath, deckBytes, 0644)
 	if err != nil {
-		fmt.Printf("error writing file: %s\n%v", finalFilePath, err)
+		return fmt.Sprintf("error writing file: %s \n ", finalFilePath), err
 	}
-	fmt.Printf("file created: %s\n", finalFilePath)
+	return "file created successfuly ", nil
 }
