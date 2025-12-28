@@ -142,9 +142,6 @@ function App() {
         <DeckView></DeckView>
       </div>
 
-
-
-
     </div>
   )
 }

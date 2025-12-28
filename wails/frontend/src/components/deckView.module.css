@@ -1,6 +1,12 @@
 
 .page {
-  display: grid;
+
+ font-family: 'Schoolbell', cursive;
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    font-weight: 400;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+    display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-auto-rows: min-content;
   gap: 20px;
