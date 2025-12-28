@@ -250,3 +250,14 @@
     color: var(--text-muted);
 }
 
+
+.deckView {
+margin-top: 100px;
+border-style: solid;
+border-width: 2px;
+border-color: grey;
+border-radius: 2px;
+}
+
+
+

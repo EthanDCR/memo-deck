@@ -2,7 +2,7 @@ import { useState } from "react"
 import styles from "./app.module.css"
 import { GetFilePaths } from "../wailsjs/go/main/App"
 import { SendContext } from "../wailsjs/go/main/App"
-
+import DeckView from "./components/DeckView"
 
 function App() {
 
@@ -135,8 +135,16 @@ function App() {
               <button onClick={() => handleSubmit()} className={styles.contextBtn}>Submit Context</button>
             </div>
           </div>}
-
       </div>
+
+
+      <div className={styles.deckView}>
+        <DeckView></DeckView>
+      </div>
+
+
+
+
     </div>
   )
 }
