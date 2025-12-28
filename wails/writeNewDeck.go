@@ -27,6 +27,10 @@ func WriteDeck(name string, response ChatResponse) (message string, err error) {
 
 	jsonLeft := strings.Index(response.Message.Content, "[")
 	jsonRight := strings.LastIndex(response.Message.Content, "]")
+	if jsonLeft == -1 || jsonRight == -1 || jsonLeft > jsonRight {
+		return "coulnt find valid json in llama response", err
+	}
+
 	jsonFinal := response.Message.Content[jsonLeft : jsonRight+1]
 
 	var cards []FlashCard
@@ -36,6 +40,8 @@ func WriteDeck(name string, response ChatResponse) (message string, err error) {
 	}
 
 	formattedName := strings.ReplaceAll(strings.TrimSpace(name), " ", "-")
+
+	fmt.Printf("\nformattedName: %s\n", formattedName)
 
 	finalDeck := Deck{
 		Name:       formattedName,
@@ -56,7 +62,7 @@ func WriteDeck(name string, response ChatResponse) (message string, err error) {
 
 	fmt.Printf("new dir made: %s \n", appDataPath)
 
-	finalFilePath := filepath.Join(appDataPath, name+".json")
+	finalFilePath := filepath.Join(appDataPath, formattedName+".json")
 	err = os.WriteFile(finalFilePath, deckBytes, 0644)
 	if err != nil {
 		return fmt.Sprintf("error writing file: %s \n ", finalFilePath), err
