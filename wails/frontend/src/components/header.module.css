@@ -1,12 +1,17 @@
 .headerStuff {
     display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0 3rem;
+    width: 100%;
 }
 
 .headerStuff h1 {
     font-family: 'Schoolbell', cursive;
-    font-size: clamp(3rem, 6vw, 4.5rem);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
     font-weight: 400;
-    margin-bottom: 2rem;
+    margin: 0;
     background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -15,6 +20,6 @@
 }
 
 .studyGuy {
-    width: 150px;
-    height: 150px;
+    width: 80px;
+    height: 80px;
 }
