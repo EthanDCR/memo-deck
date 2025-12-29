@@ -8,6 +8,7 @@ import FileSelectionPage from "./pages/FileSelectionPage"
 import DeckCreationPage from "./pages/DeckCreationPage"
 import DeckLibraryPage from "./pages/DeckLibraryPage"
 import StudyPage from "./pages/StudyPage"
+import DeckLoading from "./components/DeckLoading"
 
 function AppContent() {
   const [notes, setNotes] = useState<string>("")
@@ -15,6 +16,7 @@ function AppContent() {
   const [count, setCount] = useState<number>(10)
   const [deckName, setDeckName] = useState<string>("")
   const navigate = useNavigate()
+  const [loading, setLoading] = useState<boolean>(true)
 
   interface Context {
     name: string,
@@ -62,7 +64,8 @@ function AppContent() {
     }
   }
 
-  const handleSubmit = () => {
+
+  const handleSubmit = async () => {
     const context: Context = {
       name: deckName,
       files: files,
@@ -70,33 +73,50 @@ function AppContent() {
       count: count,
     }
 
-    SendContext(context)
+    setLoading(true)
+    try {
+      await SendContext(context)
+    } catch (error) {
+      console.error(error, "error sending context")
+    } finally {
+      setLoading(false)
+    }
+
     console.log("made context object, object: \n" + context.notes, context.files, context.count)
   }
 
-  return (
-    <div className={styles.page}>
-      <Header />
-      <Nav />
-      <Routes>
-        <Route path="/" element={<FileSelectionPage onSelectFiles={getFiles} />} />
-        <Route path="/create" element={
-          <DeckCreationPage
-            files={files}
-            deckName={deckName}
-            notes={notes}
-            count={count}
-            onDeckNameChange={setDeckName}
-            onNotesChange={setNotes}
-            onCountChange={handleCount}
-            onSubmit={handleSubmit}
-          />
-        } />
-        <Route path="/library" element={<DeckLibraryPage />} />
-        <Route path="/study/:deckName" element={<StudyPage />} />
-      </Routes>
-    </div>
-  )
+  if (!loading) {
+    return (
+      <div className={styles.page}>
+        <Header />
+        <Nav />
+        <Routes>
+          <Route path="/" element={<FileSelectionPage onSelectFiles={getFiles} />} />
+          <Route path="/create" element={
+            <DeckCreationPage
+              files={files}
+              deckName={deckName}
+              notes={notes}
+              count={count}
+              onDeckNameChange={setDeckName}
+              onNotesChange={setNotes}
+              onCountChange={handleCount}
+              onSubmit={handleSubmit}
+            />
+          } />
+          <Route path="/library" element={<DeckLibraryPage />} />
+          <Route path="/study/:deckName" element={<StudyPage />} />
+        </Routes>
+      </div>
+    )
+  } else {
+    return (
+      <div className={styles.page}>
+        <Header />
+        <DeckLoading deckName={deckName} />
+      </div>
+    )
+  }
 }
 
 function App() {

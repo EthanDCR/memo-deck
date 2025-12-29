@@ -36,7 +36,7 @@ type ChatResponse struct {
 	Done           bool    `json:"done"`
 }
 
-func (a *App) SendContext(ctx Context) {
+func (a *App) SendContext(ctx Context) (message string) {
 
 	if len(ctx.Files) <= 0 {
 		fmt.Printf("files empty\n")
@@ -104,9 +104,11 @@ func (a *App) SendContext(ctx Context) {
 	fmt.Printf("Model: %v\n Created_at: %v\n Message: %v\n Total_duration: %v\n Done: %v\n", response.Model, response.Created_at,
 		response.Message, response.Total_duration, response.Done)
 
-	message, err := WriteDeck(ctx.Name, response)
+	message, err = WriteDeck(ctx.Name, response)
 	if err != nil {
 		fmt.Printf("error writing new deck: \n %v \n %v \n", message, err)
+		return "error"
 	}
 	fmt.Printf(message, nil)
+	return "success"
 }

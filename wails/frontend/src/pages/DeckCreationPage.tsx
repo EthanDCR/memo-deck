@@ -23,6 +23,11 @@ export default function DeckCreationPage({
   onCountChange,
   onSubmit
 }: DeckCreationPageProps) {
+
+  //- create a loading state on the frontend so users know that their deck is being created.
+  //(goofy animation ?)
+  //(maybe route them to the deckView after or to studypage with that new deck?)
+
   return (
     <>
       <FileGrid files={files} />

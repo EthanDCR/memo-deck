@@ -10,4 +10,4 @@ export function GetFilePaths():Promise<Array<string>>;
 
 export function Greet(arg1:string):Promise<string>;
 
-export function SendContext(arg1:main.Context):Promise<void>;
+export function SendContext(arg1:main.Context):Promise<string>;
