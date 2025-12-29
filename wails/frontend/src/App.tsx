@@ -1,19 +1,20 @@
 import { useState, useEffect } from "react"
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom"
 import styles from "./app.module.css"
 import { GetFilePaths, SendContext } from "../wailsjs/go/main/App"
-import { ViewType } from "./types"
 import Header from "./components/Header"
 import Nav from "./components/Nav"
 import FileSelectionPage from "./pages/FileSelectionPage"
 import DeckCreationPage from "./pages/DeckCreationPage"
 import DeckLibraryPage from "./pages/DeckLibraryPage"
+import StudyPage from "./pages/StudyPage"
 
-function App() {
-  const [currentView, setCurrentView] = useState<ViewType>('file-selection')
+function AppContent() {
   const [notes, setNotes] = useState<string>("")
   const [files, setFiles] = useState<string[]>([])
   const [count, setCount] = useState<number>(10)
   const [deckName, setDeckName] = useState<string>("")
+  const navigate = useNavigate()
 
   interface Context {
     name: string,
@@ -23,10 +24,10 @@ function App() {
   }
 
   useEffect(() => {
-    if (files.length > 0 && currentView === 'file-selection') {
-      setCurrentView('deck-creation')
+    if (files.length > 0) {
+      navigate('/create')
     }
-  }, [files, currentView])
+  }, [files, navigate])
 
   const getFiles = async () => {
     try {
@@ -76,28 +77,33 @@ function App() {
   return (
     <div className={styles.page}>
       <Header />
-      <Nav currentView={currentView} onNavigate={setCurrentView} />
-      {currentView === 'file-selection' && (
-        <FileSelectionPage onSelectFiles={getFiles} />
-      )}
-
-      {currentView === 'deck-creation' && (
-        <DeckCreationPage
-          files={files}
-          deckName={deckName}
-          notes={notes}
-          count={count}
-          onDeckNameChange={setDeckName}
-          onNotesChange={setNotes}
-          onCountChange={handleCount}
-          onSubmit={handleSubmit}
-        />
-      )}
-
-      {currentView === 'deck-library' && (
-        <DeckLibraryPage />
-      )}
+      <Nav />
+      <Routes>
+        <Route path="/" element={<FileSelectionPage onSelectFiles={getFiles} />} />
+        <Route path="/create" element={
+          <DeckCreationPage
+            files={files}
+            deckName={deckName}
+            notes={notes}
+            count={count}
+            onDeckNameChange={setDeckName}
+            onNotesChange={setNotes}
+            onCountChange={handleCount}
+            onSubmit={handleSubmit}
+          />
+        } />
+        <Route path="/library" element={<DeckLibraryPage />} />
+        <Route path="/study/:deckName" element={<StudyPage />} />
+      </Routes>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
   )
 }
 

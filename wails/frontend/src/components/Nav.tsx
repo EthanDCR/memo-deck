@@ -1,26 +1,21 @@
+import { NavLink } from 'react-router-dom';
 import styles from './nav.module.css';
-import { ViewType } from '../types';
 
-interface NavProps {
-  currentView: ViewType;
-  onNavigate: (view: ViewType) => void;
-}
-
-export default function Nav({ currentView, onNavigate }: NavProps) {
+export default function Nav() {
   return (
     <nav className={styles.nav}>
-      <button
-        className={currentView === 'file-selection' ? styles.active : ''}
-        onClick={() => onNavigate('file-selection')}
+      <NavLink
+        to="/"
+        className={({ isActive }) => isActive ? styles.active : ''}
       >
         Create Deck
-      </button>
-      <button
-        className={currentView === 'deck-library' ? styles.active : ''}
-        onClick={() => onNavigate('deck-library')}
+      </NavLink>
+      <NavLink
+        to="/library"
+        className={({ isActive }) => isActive ? styles.active : ''}
       >
         My Decks
-      </button>
+      </NavLink>
     </nav>
   );
 }
