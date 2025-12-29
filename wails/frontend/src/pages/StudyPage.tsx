@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { GetDeck } from "../../wailsjs/go/main/App"
+import styles from "../pages/studypage.module.css"
 
-type Side = 'front' | 'back'
+type Side = 'question' | 'answer'
 
 export default function StudyPage() {
   const { deckName } = useParams()
@@ -10,7 +11,7 @@ export default function StudyPage() {
   const [loading, setLoading] = useState(true)
   //card state
   const [cardIndex, setCardIndex] = useState<number>(0)
-  const [cardSide, setCardSide] = useState<Side>('front')
+  const [cardSide, setCardSide] = useState<Side>('question')
 
   useEffect(() => {
     const loadDeck = async () => {
@@ -32,19 +33,32 @@ export default function StudyPage() {
   //no map, just show deck[0]?.front and then button calls function moves to deck at i to back -> deck[0]?.back
   // then button -> function that changes state of deck to i + 1 .front
 
+
+  const handleNext = () => {
+    if (cardIndex >= deck.flashCards.length - 1) {
+      setCardIndex(0)
+      setCardSide('question')
+      return
+    } else {
+      setCardIndex(cardIndex + 1)
+      setCardSide('question')
+    }
+  }
+
   return (
     <div>
       <div>
         <h2>Studying: {deck?.name}</h2>
-        <p>Flashcards: {deck?.flashCards?.length || 0}</p>
+        <p>Cards: {deck?.flashCards?.length || 0}</p>
       </div>
 
-      <div>
-        {!loading &&
-          <div>{deck?.flashCards?.[cardIndex]?.[cardSide]}</div>
-        }
-
-      </div>
+      {!loading && (
+        <div className={styles.card}>
+          <h2>  {deck?.flashCards?.[cardIndex]?.[cardSide]} </h2>
+          {(cardSide === 'question' ? <button onClick={() => setCardSide('answer')}>Reveal answer</button> :
+            <button onClick={handleNext}>Next card</button>)}
+        </div>
+      )}
 
     </div>
 

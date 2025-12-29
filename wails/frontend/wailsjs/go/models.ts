@@ -19,8 +19,8 @@ export namespace main {
 	    }
 	}
 	export class FlashCard {
-	    front: string;
-	    back: string;
+	    question: string;
+	    answer: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new FlashCard(source);
@@ -28,8 +28,8 @@ export namespace main {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.front = source["front"];
-	        this.back = source["back"];
+	        this.question = source["question"];
+	        this.answer = source["answer"];
 	    }
 	}
 	export class Deck {

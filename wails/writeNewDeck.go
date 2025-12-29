@@ -14,8 +14,8 @@ type Deck struct {
 }
 
 type FlashCard struct {
-	Front string `json:"front"`
-	Back  string `json:"back"`
+	Front string `json:"question"`
+	Back  string `json:"answer"`
 }
 
 func WriteDeck(name string, response ChatResponse) (message string, err error) {
