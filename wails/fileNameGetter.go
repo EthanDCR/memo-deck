@@ -18,11 +18,15 @@ func (a *App) GetFileNames() (files []string, err error) {
 	if err != nil {
 		return []string{}, err
 	}
-	var fileList string
+	var finalFiles []string
 	for _, entry := range entries {
-		fileList = fileList + string(entry.Name())
+		fileName := entry.Name()
+		// Remove .json extension
+		if strings.HasSuffix(fileName, ".json") {
+			fileName = strings.TrimSuffix(fileName, ".json")
+			finalFiles = append(finalFiles, fileName)
+		}
 	}
-	finalFiles := strings.Split(fileList, ".json")
 
 	return finalFiles, err
 }
