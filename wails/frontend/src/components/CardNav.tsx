@@ -161,6 +161,13 @@ const CardNav: React.FC<CardNavProps> = ({
     <div className={`card-nav-container ${className}`}>
       <nav ref={navRef} className={`card-nav ${isExpanded ? 'open' : ''}`} style={{ backgroundColor: baseColor }}>
         <div className="card-nav-top">
+          <div className="logo-section">
+            <h1 className="nav-title">MeMoDeck</h1>
+            <div className="logo-container">
+              <img src={logo} alt={logoAlt} className="logo" />
+            </div>
+          </div>
+
           <div
             className={`hamburger-menu ${isHamburgerOpen ? 'open' : ''}`}
             onClick={toggleMenu}
@@ -172,18 +179,6 @@ const CardNav: React.FC<CardNavProps> = ({
             <div className="hamburger-line" />
             <div className="hamburger-line" />
           </div>
-
-          <div className="logo-container">
-            <img src={logo} alt={logoAlt} className="logo" />
-          </div>
-
-          <button
-            type="button"
-            className="card-nav-cta-button"
-            style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
-          >
-            Get Started
-          </button>
         </div>
 
         <div className="card-nav-content" aria-hidden={!isExpanded}>

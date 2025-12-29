@@ -69,35 +69,34 @@
   transform: translateY(-4px) rotate(-45deg);
 }
 
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nav-title {
+  font-family: 'Schoolbell', cursive;
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin: 0;
+  background: linear-gradient(135deg, #a855f7, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.02em;
+}
+
 .logo-container {
   display: flex;
   align-items: center;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .logo {
-  height: 28px;
+  height: 45px;
+  width: 45px;
 }
 
-.card-nav-cta-button {
-  background-color: #111;
-  color: white;
-  border: none;
-  border-radius: calc(0.75rem - 0.35rem);
-  padding: 0 1rem;
-  height: 100%;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  align-items: center;
-}
-
-.card-nav-cta-button:hover {
-  background-color: #333;
-}
 
 .card-nav-content {
   position: absolute;
@@ -174,14 +173,12 @@
     order: 2;
   }
 
-  .logo-container {
-    position: static;
-    transform: none;
+  .logo-section {
     order: 1;
   }
 
-  .card-nav-cta-button {
-    display: none;
+  .nav-title {
+    font-size: 1.2rem;
   }
 
   .card-nav-content {

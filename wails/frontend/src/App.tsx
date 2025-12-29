@@ -2,13 +2,15 @@ import { useState, useEffect } from "react"
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom"
 import styles from "./app.module.css"
 import { GetFilePaths, SendContext } from "../wailsjs/go/main/App"
-import Header from "./components/Header"
-import Nav from "./components/Nav"
+import CardNav from "./components/CardNav"
 import FileSelectionPage from "./pages/FileSelectionPage"
 import DeckCreationPage from "./pages/DeckCreationPage"
 import DeckLibraryPage from "./pages/DeckLibraryPage"
 import StudyPage from "./pages/StudyPage"
 import DeckLoading from "./components/DeckLoading"
+import studyGuyLogo from "./assets/images/studyGuy.png"
+
+
 
 function AppContent() {
   const [notes, setNotes] = useState<string>("")
@@ -16,7 +18,7 @@ function AppContent() {
   const [count, setCount] = useState<number>(10)
   const [deckName, setDeckName] = useState<string>("")
   const navigate = useNavigate()
-  const [loading, setLoading] = useState<boolean>(true)
+  const [loading, setLoading] = useState<boolean>(false)
 
   interface Context {
     name: string,
@@ -88,8 +90,33 @@ function AppContent() {
   if (!loading) {
     return (
       <div className={styles.page}>
-        <Header />
-        <Nav />
+        <CardNav
+          logo={studyGuyLogo}
+          logoAlt="MeMoDeck"
+          baseColor="#1a1625"
+          menuColor="#b8a5d0"
+          buttonBgColor="#a855f7"
+          buttonTextColor="#fff"
+          items={[
+            {
+              label: "Create Deck",
+              bgColor: "#a855f7",
+              textColor: "#fff",
+              links: [
+                { label: "New Deck", href: "/", ariaLabel: "Create a new deck" }
+              ]
+            },
+            {
+              label: "My Decks",
+              bgColor: "#ec4899",
+              textColor: "#fff",
+              links: [
+                { label: "View Library", href: "/library", ariaLabel: "View your deck library" }
+              ]
+            }
+          ]}
+        />
+
         <Routes>
           <Route path="/" element={<FileSelectionPage onSelectFiles={getFiles} />} />
           <Route path="/create" element={
@@ -112,7 +139,6 @@ function AppContent() {
   } else {
     return (
       <div className={styles.page}>
-        <Header />
         <DeckLoading deckName={deckName} />
       </div>
     )
