@@ -46,21 +46,22 @@ export default function StudyPage() {
   }
 
   return (
-    <div>
-      <div>
+    <div className={styles.page}>
+      <div className={styles.header}>
         <h2>Studying: {deck?.name}</h2>
         <p>Cards: {deck?.flashCards?.length || 0}</p>
       </div>
 
       {!loading && (
         <div className={styles.card}>
-          <h2>  {deck?.flashCards?.[cardIndex]?.[cardSide]} </h2>
+          <h2>{cardSide.toUpperCase()} #{cardIndex + 1}: <br /><br /> {deck?.flashCards?.[cardIndex]?.[cardSide]} </h2>
           {(cardSide === 'question' ? <button onClick={() => setCardSide('answer')}>Reveal answer</button> :
             <button onClick={handleNext}>Next card</button>)}
         </div>
-      )}
+      )
+      }
 
-    </div>
+    </div >
 
   )
 }

@@ -1,12 +1,86 @@
+.page {
+  min-height: 100vh;
+  padding: 1rem 2rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.header {
+  text-align: center;
+}
+
+.header h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.header p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
 .card {
-  width: 500px;
+  width: min(600px, 90vw);
+  min-height: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 5px solid #333;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
   cursor: pointer;
   text-align: center;
-  padding: 20px;
-  background: grey;
+  padding: 3rem 2rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 48px rgba(168, 85, 247, 0.2);
+  border-color: var(--accent-purple);
+}
+
+.card h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.card button {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-top: auto;
+}
+
+.card button:hover {
+  background-color: var(--bg-card);
+  border-color: var(--text-secondary);
+}
+
+.card button:active {
+  background-color: var(--bg-hover);
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 2rem 1rem;
+  }
+
+  .card {
+    min-height: 300px;
+    padding: 2rem 1.5rem;
+  }
 }
