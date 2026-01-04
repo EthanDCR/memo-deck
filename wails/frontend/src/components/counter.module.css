@@ -42,3 +42,10 @@
     color: var(--text-primary);
     text-align: center;
 }
+
+.number {
+font-size: 12px !important;
+}
+
+
+

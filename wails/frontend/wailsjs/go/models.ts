@@ -34,6 +34,7 @@ export namespace main {
 	}
 	export class Deck {
 	    name: string;
+	    Created_at: number;
 	    flashCards: FlashCard[];
 	
 	    static createFrom(source: any = {}) {
@@ -43,6 +44,7 @@ export namespace main {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.name = source["name"];
+	        this.Created_at = source["Created_at"];
 	        this.flashCards = this.convertValues(source["flashCards"], FlashCard);
 	    }
 	

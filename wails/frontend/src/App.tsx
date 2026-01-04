@@ -12,6 +12,7 @@ import studyGuyLogo from "./assets/images/studyGuy.png"
 
 
 
+
 function AppContent() {
   const [notes, setNotes] = useState<string>("")
   const [files, setFiles] = useState<string[]>([])
@@ -19,6 +20,8 @@ function AppContent() {
   const [deckName, setDeckName] = useState<string>("")
   const navigate = useNavigate()
   const [loading, setLoading] = useState<boolean>(false)
+  const [deckCreated, setDeckCreated] = useState<boolean>(false)
+  const [showNameTooLongMessage, setNameTooLongMessage] = useState<boolean>(false)
 
   interface Context {
     name: string,
@@ -58,7 +61,7 @@ function AppContent() {
         break;
 
       case "-":
-        if (count <= 0) {
+        if (count <= 5) {
           break;
         }
         setCount(count - 1)
@@ -67,7 +70,20 @@ function AppContent() {
   }
 
 
+  const nameTooLong = () => {
+    setNameTooLongMessage(true)
+    setTimeout(() => {
+      setNameTooLongMessage(false)
+    }, 2000)
+  }
+
+
   const handleSubmit = async () => {
+
+    if (deckName.length > 25) {
+      nameTooLong()
+      return
+    }
     const context: Context = {
       name: deckName,
       files: files,
@@ -81,13 +97,46 @@ function AppContent() {
     } catch (error) {
       console.error(error, "error sending context")
     } finally {
+      setDeckCreated(true)
       setLoading(false)
     }
 
     console.log("made context object, object: \n" + context.notes, context.files, context.count)
   }
 
-  if (!loading) {
+  if (deckCreated) {
+    return (
+      <div className={styles.successContainer}>
+        <h2>Successfully generated cards for {deckName} :) </h2>
+
+        <div className={styles.createdButtons}>
+          <button onClick={() => {
+            setDeckCreated(false)
+            navigate(`/study/${deckName}`)
+          }}>Go study {deckName} </button>
+          <button onClick={() => {
+            setDeckCreated(false)
+            navigate('/')
+          }}>Back to library</button>
+          <button onClick={() => {
+            setDeckCreated(false)
+            navigate('/create')
+          }}>Create another deck</button>
+        </div>
+
+      </div>
+    )
+  }
+
+  else if (loading) {
+    return (
+      <div className={styles.page}>
+        <DeckLoading deckName={deckName} />
+      </div>
+    )
+  }
+
+  else {
     return (
       <div className={styles.page}>
         <CardNav
@@ -131,15 +180,21 @@ function AppContent() {
               onSubmit={handleSubmit}
             />
           } />
+
           <Route path="/library" element={<DeckLibraryPage />} />
           <Route path="/study/:deckName" element={<StudyPage />} />
         </Routes>
-      </div>
-    )
-  } else {
-    return (
-      <div className={styles.page}>
-        <DeckLoading deckName={deckName} />
+
+        <div className={styles.errorMessages}>
+          {showNameTooLongMessage &&
+            <p>Error: Deck name must be shorter than 25 charecters</p>
+          }
+          {!deckName &&
+            <p>Error: Deck name cannot be blank.</p>
+          }
+        </div>
+
+
       </div>
     )
   }

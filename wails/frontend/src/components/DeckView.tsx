@@ -26,7 +26,7 @@ export default function DeckView() {
       {showFileNames &&
         fileNames.slice(-9).map((name, index) => (
           <div key={index} className={styles.fileNames}>
-            <button key={index} onClick={() => handleClick(name)} >Study {name}</button>
+            <button key={index} onClick={() => handleClick(name)} > {name.replace(/-/g, " ")}</button>
           </div>
         ))
       }

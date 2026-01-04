@@ -1,14 +1,20 @@
 .container {
     width: 100%;
     max-width: 1200px;
+    padding-top: 50px;
     margin: 0 auto;
 }
 
 .pageTitle {
+    font-family: 'Schoolbell', cursive;
     font-size: 2.5rem;
-    font-weight: 600;
+    font-weight: 400;
     margin-bottom: 0.5rem;
-    color: var(--text-primary);
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.02em;
 }
 
 .pageSubtitle {

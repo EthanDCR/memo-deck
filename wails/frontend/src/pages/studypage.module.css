@@ -12,9 +12,15 @@
 }
 
 .header h2 {
-  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-family: 'Schoolbell', cursive;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 400;
   margin-bottom: 0.5rem;
-  color: var(--text-primary);
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.02em;
 }
 
 .header p {

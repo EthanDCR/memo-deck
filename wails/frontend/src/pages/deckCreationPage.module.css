@@ -1,3 +1,8 @@
+
+.page {
+padding-top: 75px;
+}
+
 .sectionHeader {
     color: var(--text-primary);
     font-weight: 600;

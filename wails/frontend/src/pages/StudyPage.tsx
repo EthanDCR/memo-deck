@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { GetDeck } from "../../wailsjs/go/main/App"
 import styles from "../pages/studypage.module.css"
+import { RotatingLines } from "react-loader-spinner"
+
 
 type Side = 'question' | 'answer'
 
@@ -9,9 +11,13 @@ export default function StudyPage() {
   const { deckName } = useParams()
   const [deck, setDeck] = useState<any>(null)
   const [loading, setLoading] = useState(true)
-  //card state
   const [cardIndex, setCardIndex] = useState<number>(0)
   const [cardSide, setCardSide] = useState<Side>('question')
+  const [deckNameTrimmed, setDeckNameTrimmed] = useState<any>("")
+
+  useEffect(() => {
+    setDeckNameTrimmed(deckName?.replace(/-/g, "  "))
+  }, []);
 
   useEffect(() => {
     const loadDeck = async () => {
@@ -29,11 +35,6 @@ export default function StudyPage() {
     return <div>Loading deck...</div>
   }
 
-  //state to control index
-  //no map, just show deck[0]?.front and then button calls function moves to deck at i to back -> deck[0]?.back
-  // then button -> function that changes state of deck to i + 1 .front
-
-
   const handleNext = () => {
     if (cardIndex >= deck.flashCards.length - 1) {
       setCardIndex(0)
@@ -48,7 +49,7 @@ export default function StudyPage() {
   return (
     <div className={styles.page}>
       <div className={styles.header}>
-        <h2>Studying: {deck?.name}</h2>
+        <h2>Studying: {deckNameTrimmed}</h2>
         <p>Cards: {deck?.flashCards?.length || 0}</p>
       </div>
 

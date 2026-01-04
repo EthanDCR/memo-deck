@@ -6,10 +6,12 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 type Deck struct {
 	Name       string      `json:"name"`
+	Created_at int64       `json:"Created_at"`
 	FlashCards []FlashCard `json:"flashCards"`
 }
 
@@ -43,9 +45,12 @@ func WriteDeck(name string, response ChatResponse) (message string, err error) {
 
 	fmt.Printf("\nformattedName: %s\n", formattedName)
 
+	timeNow := time.Now().Unix()
+
 	finalDeck := Deck{
 		Name:       formattedName,
 		FlashCards: cards,
+		Created_at: timeNow,
 	}
 
 	deckBytes, err := json.MarshalIndent(finalDeck, "", "\t")

@@ -1,0 +1,239 @@
+A LITTLE STRUCTURE
+After reading lesson 21, you’ll be able to
+ Give coordinates on Mars a little structure
+ Encode structures to the popular JSON data format
+A vehicle is made up of many parts, and those parts may have associated values (or
+state). The engine is on, the wheels are turning, the battery is fully charged. Using a separate variable for each value is akin to the vehicle sitting in the shop disassembled. Likewise, a building may have windows that are open and a door that is unlocked. To
+assemble the parts or construct a structure, Go provides a structure type.
+Consider this Whereas collections are of the same type, structures allow you to
+group disparate things together. Take a look around. What do you see that could be
+represented with a structure?
+162 Lesson 21 A little structure
+21.1 Declaring a structure
+A pair of coordinates are good candidates for adopting a little structure. Latitude and
+longitude go everywhere together. In a world without structures, a function to calculate
+the distance between two locations would need two pairs of coordinates:
+func distance(lat1, long1, lat2, long2 float64) float64
+Though this does work, passing independent coordinates around is prone to errors and
+just plain tedious. Latitude and longitude are a single unit, and structures let you treat
+them as such.
+The curiosity structure in the next listing is declared with floating-point fields for latitude and longitude. To assign a value to a field or access the value of a field, use dot notation with variable name dot field name, as shown.
+var curiosity struct {
+ lat float64
+ long float64
+}
+curiosity.lat = -4.5895
+curiosity.long = 137.4417
+fmt.Println(curiosity.lat, curiosity.long)
+fmt.Println(curiosity)
+NOTE The Print family of functions will display the contents of
+structures for you.
+The Mars Curiosity rover began its journey at Bradbury
+Landing, located at 435'22.2" S, 13726'30.1" E. In listing
+21.1 the latitude and longitude for Bradbury Landing are
+expressed in decimal degrees, with positive latitudes to the
+north and positive longitudes to the east, as illustrated in figure 21.1.
+Listing 21.1 Introducing a little structure: struct.go
+Assigns values
+to fields of the
+structure
+Prints -4.5895 137.4417
+Prints {-4.5895 137.4417}
+North
++
+East
++
+Figure 21.1 Latitude and
+longitude in decimal degrees
+Reusing structures with types 163
+
+21.2 Reusing structures with types
+If you need multiple structures with the same fields, you can define a type, much like
+the celsius type in lesson 13. The location type declared in the following listing is used to
+place the Spirit rover at Columbia Memorial Station and the Opportunity rover at Challenger Memorial Station.
+type location struct {
+ lat float64
+ long float64
+}
+var spirit location
+spirit.lat = -14.5684
+spirit.long = 175.472636
+var opportunity location
+opportunity.lat = -1.9462
+opportunity.long = 354.4734
+fmt.Println(spirit, opportunity)
+Listing 21.2 Location type: location.go
+Quick check 21.1
+1 What advantage do structures have over individual variables?
+2 Bradbury Landing is about 4,400 meters below Martian “sea level.” If curiosity had an
+altitude field, how would you assign it the value of –4400?
+QC 21.1 answer
+1 Structures group related values together, making it simpler and less error-prone to pass them
+around.
+2 curiosity.altitude = -4400
+Reuses the
+location type
+Prints
+{-14.5684 175.472636}
+{-1.9462 354.4734}
+164 Lesson 21 A little structure
+
+21.3 Initialize structures with composite literals
+Composite literals for initializing structures come in two different forms. In listing 21.3,
+the opportunity and insight variables are initialized using field-value pairs. Fields may be
+in any order, and fields that aren’t listed will retain the zero value for their type. This
+form tolerates change and will continue to work correctly even if fields are added to the
+structure or if fields are reordered. If location gained an altitude field, both opportunity
+and insight would default to an altitude of zero.
+type location struct {
+ lat, long float64
+}
+opportunity := location{lat: -1.9462, long: 354.4734}
+fmt.Println(opportunity)
+insight := location{lat: 4.5, long: 135.9}
+fmt.Println(insight)
+The composite literal in listing 21.4 doesn’t specify field names. Instead, a value must be
+provided for each field in the same order in which they’re listed in the structure definition. This form works best for types that are stable and only have a few fields. If the location type gains an altitude field, spirit must specify a value for altitude for the program
+to compile. Mixing up the order of lat and long won’t cause a compiler error, but the program won’t produce correct results.
+Listing 21.3 Composite literal with field-value pairs: struct-literal.go
+Quick check 21.2 How would you adapt the code from listing 21.1 to use the location type
+for the Curiosity rover at Bradbury Landing?
+QC 21.2 answer
+var curiosity location
+curiosity.lat = -4.5895
+curiosity.long = 137.4417
+Prints {-1.9462 354.4734}
+Prints {4.5 135.9}
+Structures are copied 165
+spirit := location{-14.5684, 175.472636}
+fmt.Println(spirit)
+No matter how you initialize a structure, you can modify the %v format verb with a plus
+sign + to print out the field names, as shown in the next listing. This is especially useful
+for inspecting large structures.
+curiosity := location{-4.5895, 137.4417}
+fmt.Printf("%v\n", curiosity)
+fmt.Printf("%+v\n", curiosity)
+21.4 Structures are copied
+When the Curiosity rover heads east from Bradbury Landing to Yellowknife Bay, the
+location of Bradbury Landing doesn’t change in real life, nor in the next listing. The
+curiosity variable is initialized with a copy of the values contained in bradbury, so the
+values change independently.
+bradbury := location{-4.5895, 137.4417}
+curiosity := bradbury
+curiosity.long += 0.0106
+fmt.Println(bradbury, curiosity)
+Listing 21.4 Composite literal with values only: struct-literal.go
+Listing 21.5 Printing keys of structures: struct-literal.go
+Listing 21.6 Assignment makes a copy: struct-value.go
+Prints {-14.5684 175.472636}
+Prints {-4.5895 137.4417}
+Prints {lat:-4.5895
+long:137.4417}
+Quick check 21.3 In what ways is the field-value composite literal syntax preferable to the
+values-only form?
+QC 21.3 answer
+1 Fields may be listed in any order.
+2 Fields are optional, taking on the zero value if not listed.
+3 No changes are required when reordering or adding fields to the structure declaration.
+Heads east to
+Yellowknife Bay
+Prints {-4.5895 137.4417}
+{-4.5895 137.4523}
+166 Lesson 21 A little structure
+
+21.5 A slice of structures
+A slice of structures, []struct is a collection of zero or more values (a slice) where each
+value is based on a structure instead of a primitive type like float64.
+If a program needed a collection of landing sites for Mars rovers, the way not to do it would
+be two separate slices for latitudes and longitudes, as shown in the following listing.
+lats := []float64{-4.5895, -14.5684, -1.9462}
+longs := []float64{137.4417, 175.472636, 354.4734}
+This already looks bad, especially in light of the location structure introduced earlier in
+this lesson. Now imagine more slices being added for altitude and so on. A mistake
+when editing the previous listing could easily result in data misaligned across slices or
+even slices of different lengths.
+A better solution is to create a single slice where each value is a structure. Then each
+location is a single unit, which you can extend with the name of the landing site or other
+fields as needed, as shown in the next listing.
+type location struct {
+ name string
+ lat float64
+ long float64
+}
+locations := []location{
+ {name: "Bradbury Landing", lat: -4.5895, long: 137.4417},
+ {name: "Columbia Memorial Station", lat: -14.5684, long: 175.472636},
+ {name: "Challenger Memorial Station", lat: -1.9462, long: 354.4734},
+}
+Listing 21.7 Two slices of floats: slice-struct.go
+Listing 21.8 A slice of locations: slice-struct.go
+Quick check 21.4 If curiosity were passed to a function that manipulated lat or long, would
+the caller see those changes?
+QC 21.4 answer No, the function would receive a copy of curiosity, as is the case with arrays.
+Encoding structures to JSON 167
+
+21.6 Encoding structures to JSON
+JavaScript Object Notation, or JSON (json.org), is a standard data format popularized by
+Douglas Crockford. It’s based on a subset of the JavaScript language but it’s widely supported in other programming languages. JSON is commonly used for web APIs (Application Programming Interfaces), including the MAAS API (github.com/ingenology/
+mars_weather_api) that provides weather data from the Curiosity rover.
+The Marshal function from the json package is used in listing 21.9 to encode the data in
+location into JSON format. Marshal returns the JSON data as bytes, which can be sent over
+the wire or converted to a string for display. It may also return an error, a topic that’s
+covered in lesson 28.
+package main
+import (
+ "encoding/json"
+ "fmt"
+ "os"
+)
+func main() {
+ type location struct {
+ Lat, Long float64
+ }
+ curiosity := location{-4.5895, 137.4417}
+ bytes, err := json.Marshal(curiosity)
+ exitOnError(err)
+ fmt.Println(string(bytes))
+ }
+Listing 21.9 Marshalling location: json.go
+Quick check 21.5 What is the danger of using multiple interrelated slices?
+QC 21.5 answer It’s easy to end up with data misaligned across slices.
+Fields must begin
+with an uppercase
+letter.
+Prints
+{"Lat":-4.5895,
+"Long":137.4417}
+168 Lesson 21 A little structure
+// exitOnError prints any errors and exits.
+func exitOnError(err error) {
+ if err != nil {
+ fmt.Println(err)
+ os.Exit(1)
+ }
+}
+Notice that the JSON keys match the field names of the location structure. For this to
+work, the json package requires fields to be exported. If Lat and Long began with a lowercase letter, the output would be {}.
+21.7 Customizing JSON with struct tags
+Go’s json package requires that fields have an initial uppercase letter and multiword
+field names use CamelCase by convention. You may want JSON keys in snake_case, particularly when interoperating with Python or Ruby. The fields of a structure can be
+tagged with the field names you want the json package to use.
+The only change from listing 21.9 to listing 21.10 is the inclusion of struct tags that alter
+the output of the Marshal function. Notice that the Lat and Long fields must still be
+exported for the json package to see them.
+type location struct {
+ Lat float64 `json:"latitude"`
+ Long float64 `json:"longitude"`
+}
+curiosity := location{-4.5895, 137.4417}
+bytes, err := json.Marshal(curiosity)
+exitOnError(err)
+fmt.Println(string(bytes))
+Listing 21.10 Customizing location fields: json-tags.go
+Quick check 21.6 What does the abbreviation JSON stand for?
+QC 21.6 answer JSON stands for JavaScript Object Notation.
+Struct tags alter
+the output.
+Prints
+{"latitude":-4.5895,
+"longitude":137.4417}

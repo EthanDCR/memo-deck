@@ -26,6 +26,7 @@ type ChatRequest struct {
 	Model    string    `json:"model"`
 	Messages []Message `json:"messages"`
 	Stream   bool      `json:"stream"`
+	Format   string    `json:"format"`
 }
 
 type ChatResponse struct {
@@ -70,6 +71,7 @@ func (a *App) SendContext(ctx Context) (message string) {
 			{Role: "user", Content: fileContents},
 		},
 		Stream: false,
+		Format: "json",
 	}
 
 	jsonData, err := json.Marshal(chatRequest)

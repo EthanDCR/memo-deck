@@ -2,6 +2,7 @@ import styles from './deckCreationPage.module.css';
 import FileGrid from '../components/FileGrid';
 import Counter from '../components/Counter';
 
+
 interface DeckCreationPageProps {
   files: string[];
   deckName: string;
@@ -24,14 +25,9 @@ export default function DeckCreationPage({
   onSubmit
 }: DeckCreationPageProps) {
 
-  //- create a loading state on the frontend so users know that their deck is being created.
-  //(goofy animation ?)
-  //(maybe route them to the deckView after or to studypage with that new deck?)
-
   return (
-    <>
+    <div className={styles.page}>
       <FileGrid files={files} />
-
       <div className={styles.contextSection}>
         <div className={styles.deckNameInput}>
           <div className={styles.sectionHeader}>Deck Name</div>
@@ -54,6 +50,6 @@ export default function DeckCreationPage({
           <button onClick={onSubmit} className={styles.contextBtn}>Submit Context</button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
