@@ -3,6 +3,37 @@
 padding-top: 75px;
 }
 
+.mainLayout {
+    display: flex;
+    gap: 2rem;
+    width: 95%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.leftColumn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.leftContainer {
+    width: 100%;
+    padding: 1.75rem;
+    background-color: var(--bg-secondary);
+    border-radius: 1rem;
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.rightColumn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
 .sectionHeader {
     color: var(--text-primary);
     font-weight: 600;
@@ -13,30 +44,19 @@ padding-top: 75px;
     opacity: 0.9;
 }
 
-.contextSection {
-    width: 90%;
-    max-width: 700px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
 .deckNameInput {
     width: 100%;
-    margin-bottom: 1.5rem;
-    padding: 1.75rem;
-    background-color: var(--bg-secondary);
-    border-radius: 1rem;
-    border: 1px solid var(--border-color);
 }
 
 .notesInput {
     width: 100%;
-    margin-bottom: 1.5rem;
+    height: 100%;
     padding: 1.75rem;
     background-color: var(--bg-secondary);
     border-radius: 1rem;
     border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
 }
 
 .deckNameTextArea {
@@ -75,6 +95,8 @@ padding-top: 75px;
     border-radius: 1rem;
     padding: 1.5rem;
     width: 100%;
+    flex: 1;
+    min-height: 400px;
     resize: none;
     font-family: inherit;
     transition: all 0.2s ease;
@@ -97,19 +119,17 @@ padding-top: 75px;
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    margin-top: 1.5rem;
-    justify-content: center;
     align-items: center;
     width: 100%;
 }
 
-.contextBtn {
+.contextBtn { 
+  color: var(--text-primary);
     flex: 1;
     min-width: 200px;
     height: 3.75rem;
     font-size: 1.125rem;
     background-color: var(--bg-secondary);
-    color: var(--text-primary);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 12px 28px;
@@ -119,12 +139,27 @@ padding-top: 75px;
 }
 
 .contextBtn:hover {
+  color: pink;
     background-color: var(--bg-card);
     border-color: var(--text-secondary);
 }
 
 .contextBtn:active {
     background-color: var(--bg-hover);
+}
+
+@media (max-width: 1024px) {
+    .mainLayout {
+        flex-direction: column;
+    }
+
+    .notesInput {
+        height: auto;
+    }
+
+    .notesTextArea {
+        min-height: 200px;
+    }
 }
 
 @media (max-width: 768px) {

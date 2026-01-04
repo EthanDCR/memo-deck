@@ -26,6 +26,7 @@
 }
 
 .counter button:hover {
+  color: pink;
     background-color: var(--bg-hover);
     border-color: var(--text-secondary);
 }
@@ -45,6 +46,7 @@
 
 .number {
 font-size: 12px !important;
+font-weight: 100 !important;
 }
 
 

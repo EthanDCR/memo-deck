@@ -1,11 +1,5 @@
 .selectedFilesMap {
-    margin: 1.5rem 0;
-    padding: 1.75rem;
-    background-color: var(--bg-secondary);
-    border-radius: 1rem;
-    border: 1px solid var(--border-color);
-    width: 90%;
-    max-width: 700px;
+    width: 100%;
 }
 
 .sectionHeader {

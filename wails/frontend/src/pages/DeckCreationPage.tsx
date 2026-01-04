@@ -27,29 +27,38 @@ export default function DeckCreationPage({
 
   return (
     <div className={styles.page}>
-      <FileGrid files={files} />
-      <div className={styles.contextSection}>
-        <div className={styles.deckNameInput}>
-          <div className={styles.sectionHeader}>Deck Name</div>
-          <textarea
-            className={styles.deckNameTextArea}
-            placeholder="e.g. Biology Midterm - Chapter 5"
-            onChange={(e) => onDeckNameChange(e.target.value)}
-          ></textarea>
+      <div className={styles.mainLayout}>
+        <div className={styles.leftColumn}>
+          <div className={styles.leftContainer}>
+            <FileGrid files={files} />
+
+            <div className={styles.deckNameInput}>
+              <div className={styles.sectionHeader}>Deck Name</div>
+              <textarea
+                className={styles.deckNameTextArea}
+                placeholder="e.g. Biology Midterm - Chapter 5"
+                onChange={(e) => onDeckNameChange(e.target.value)}
+              ></textarea>
+            </div>
+
+            <div className={styles.submitContainer}>
+              <Counter value={count} onCount={onCountChange} />
+              <button onClick={onSubmit} className={styles.contextBtn}>Generate cards</button>
+            </div>
+          </div>
         </div>
-        <div className={styles.notesInput}>
-          <div className={styles.sectionHeader}>Context (Optional)</div>
-          <textarea
-            className={styles.notesTextArea}
-            placeholder="e.g. I have a midterm on Friday about these PDFs. Generate cards that focus on definitions and historical dates, and skip the introductory sections."
-            onChange={(e) => onNotesChange(e.target.value)}
-            rows={15}
-            cols={80}
-          ></textarea>
-        </div>
-        <div className={styles.submitContainer}>
-          <Counter value={count} onCount={onCountChange} />
-          <button onClick={onSubmit} className={styles.contextBtn}>Submit Context</button>
+
+        <div className={styles.rightColumn}>
+          <div className={styles.notesInput}>
+            <div className={styles.sectionHeader}>Context (Optional)</div>
+            <textarea
+              className={styles.notesTextArea}
+              placeholder="e.g. I have a midterm on Friday about these PDFs. Generate cards that focus on definitions and historical dates, and skip the introductory sections."
+              onChange={(e) => onNotesChange(e.target.value)}
+              rows={10}
+              cols={80}
+            ></textarea>
+          </div>
         </div>
       </div>
     </div>
