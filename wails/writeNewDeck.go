@@ -7,6 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type Deck struct {
@@ -18,6 +20,8 @@ type Deck struct {
 type FlashCard struct {
 	Front string `json:"question"`
 	Back  string `json:"answer"`
+	ID    string `json:"id"`
+	DueAt int64  `json:"dueAt"`
 }
 
 func WriteDeck(name string, response ChatResponse) (message string, err error) {
@@ -39,6 +43,11 @@ func WriteDeck(name string, response ChatResponse) (message string, err error) {
 	err = json.Unmarshal([]byte(jsonFinal), &cards)
 	if err != nil {
 		return "\n Ai response was not valid json:\n%v\n", err
+	}
+
+	for i := range cards {
+		cards[i].ID = uuid.NewString()
+		cards[i].DueAt = 0
 	}
 
 	formattedName := strings.ReplaceAll(strings.TrimSpace(name), " ", "-")

@@ -21,6 +21,8 @@ export namespace main {
 	export class FlashCard {
 	    question: string;
 	    answer: string;
+	    id: string;
+	    dueAt: number;
 	
 	    static createFrom(source: any = {}) {
 	        return new FlashCard(source);
@@ -30,6 +32,8 @@ export namespace main {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.question = source["question"];
 	        this.answer = source["answer"];
+	        this.id = source["id"];
+	        this.dueAt = source["dueAt"];
 	    }
 	}
 	export class Deck {
