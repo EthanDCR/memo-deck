@@ -17,6 +17,7 @@ export default function FileSelectionPage({ onSelectFiles }: FileSelectionPagePr
         <li>.txt</li>
         <li>.pdf</li>
       </ul>
+
       <button onClick={onSelectFiles}>Select Files</button>
     </div>
   );

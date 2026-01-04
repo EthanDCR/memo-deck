@@ -14,6 +14,7 @@ import (
 type Deck struct {
 	Name       string      `json:"name"`
 	Created_at int64       `json:"Created_at"`
+	ID         string      `json:"ID"`
 	FlashCards []FlashCard `json:"flashCards"`
 }
 
@@ -24,6 +25,47 @@ type FlashCard struct {
 	DueAt int64  `json:"dueAt"`
 }
 
+func extractFlashcards(content string) ([]FlashCard, error) {
+	var cards []FlashCard
+
+	err := json.Unmarshal([]byte(content), &cards)
+	if err == nil && len(cards) > 0 {
+		return cards, nil
+	}
+
+	// Strategy 2: Try parsing as generic object and search for flashcard arrays
+	var rawData map[string]any
+	err = json.Unmarshal([]byte(content), &rawData)
+	if err == nil {
+		// Look through all fields for arrays that look like flashcards
+		for _, value := range rawData {
+			if arr, ok := value.([]any); ok {
+				// Try to convert this array to flashcards
+				jsonBytes, _ := json.Marshal(arr)
+				var tempCards []FlashCard
+				if json.Unmarshal(jsonBytes, &tempCards) == nil && len(tempCards) > 0 {
+					// Verify these are actual flashcards (have question and answer)
+					if tempCards[0].Front != "" && tempCards[0].Back != "" {
+						return tempCards, nil
+					}
+				}
+			}
+		}
+	}
+
+	jsonLeft := strings.Index(content, "[")
+	jsonRight := strings.LastIndex(content, "]")
+	if jsonLeft != -1 && jsonRight != -1 && jsonLeft < jsonRight {
+		jsonFinal := content[jsonLeft : jsonRight+1]
+		err = json.Unmarshal([]byte(jsonFinal), &cards)
+		if err == nil && len(cards) > 0 {
+			return cards, nil
+		}
+	}
+
+	return nil, fmt.Errorf("could not extract valid flashcards from response")
+}
+
 func WriteDeck(name string, response ChatResponse) (message string, err error) {
 
 	configPath, err := os.UserConfigDir()
@@ -31,16 +73,7 @@ func WriteDeck(name string, response ChatResponse) (message string, err error) {
 		return "could not find config directoy", err
 	}
 
-	jsonLeft := strings.Index(response.Message.Content, "[")
-	jsonRight := strings.LastIndex(response.Message.Content, "]")
-	if jsonLeft == -1 || jsonRight == -1 || jsonLeft > jsonRight {
-		return "coulnt find valid json in llama response", err
-	}
-
-	jsonFinal := response.Message.Content[jsonLeft : jsonRight+1]
-
-	var cards []FlashCard
-	err = json.Unmarshal([]byte(jsonFinal), &cards)
+	cards, err := extractFlashcards(response.Message.Content)
 	if err != nil {
 		return "\n Ai response was not valid json:\n%v\n", err
 	}
@@ -55,11 +88,13 @@ func WriteDeck(name string, response ChatResponse) (message string, err error) {
 	fmt.Printf("\nformattedName: %s\n", formattedName)
 
 	timeNow := time.Now().Unix()
+	newId := uuid.NewString()
 
 	finalDeck := Deck{
 		Name:       formattedName,
-		FlashCards: cards,
+		ID:         newId,
 		Created_at: timeNow,
+		FlashCards: cards,
 	}
 
 	deckBytes, err := json.MarshalIndent(finalDeck, "", "\t")

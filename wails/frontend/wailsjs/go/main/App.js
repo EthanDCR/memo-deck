@@ -21,3 +21,7 @@ export function Greet(arg1) {
 export function SendContext(arg1) {
   return window['go']['main']['App']['SendContext'](arg1);
 }
+
+export function UpdateState(arg1) {
+  return window['go']['main']['App']['UpdateState'](arg1);
+}

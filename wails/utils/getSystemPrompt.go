@@ -10,7 +10,7 @@ func GetSystemPrompt(count int) (string, error) {
 		return "", errors.New("count must be between 1-100")
 	}
 
-	return fmt.Sprintf(`Act as a JSON API server. 
+	return fmt.Sprintf(`Act as a JSON API server.
 Input: Text or Image data.
 Output: A JSON array containing exactly %d objects.
 
