@@ -37,14 +37,16 @@ export default function DeckCreationPage({
             onChange={(e) => onDeckNameChange(e.target.value)}
           ></textarea>
         </div>
-        <div className={styles.sectionHeader}>Context (Optional)</div>
-        <textarea
-          className={styles.notesTextArea}
-          placeholder="e.g. I have a midterm on Friday about these PDFs. Generate cards that focus on definitions and historical dates, and skip the introductory sections."
-          onChange={(e) => onNotesChange(e.target.value)}
-          rows={15}
-          cols={80}
-        ></textarea>
+        <div className={styles.notesInput}>
+          <div className={styles.sectionHeader}>Context (Optional)</div>
+          <textarea
+            className={styles.notesTextArea}
+            placeholder="e.g. I have a midterm on Friday about these PDFs. Generate cards that focus on definitions and historical dates, and skip the introductory sections."
+            onChange={(e) => onNotesChange(e.target.value)}
+            rows={15}
+            cols={80}
+          ></textarea>
+        </div>
         <div className={styles.submitContainer}>
           <Counter value={count} onCount={onCountChange} />
           <button onClick={onSubmit} className={styles.contextBtn}>Submit Context</button>

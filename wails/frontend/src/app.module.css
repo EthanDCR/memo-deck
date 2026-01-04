@@ -89,6 +89,10 @@
   transform: translateY(0);
 }
 
-
+.errorMessages{
+  font-weight: bold;
+color: red;
+size: 24px;
+}
 
 

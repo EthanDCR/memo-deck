@@ -23,6 +23,7 @@ function AppContent() {
   const [deckCreated, setDeckCreated] = useState<boolean>(false)
   const [showNameTooLongMessage, setNameTooLongMessage] = useState<boolean>(false)
 
+
   interface Context {
     name: string,
     files: string[],
@@ -74,16 +75,17 @@ function AppContent() {
     setNameTooLongMessage(true)
     setTimeout(() => {
       setNameTooLongMessage(false)
-    }, 2000)
+    }, 5000)
   }
 
 
-  const handleSubmit = async () => {
 
-    if (deckName.length > 25) {
+  const handleSubmit = async () => {
+    if (deckName.length > 25 || deckName.length < 5) {
       nameTooLong()
       return
     }
+
     const context: Context = {
       name: deckName,
       files: files,
@@ -185,14 +187,14 @@ function AppContent() {
           <Route path="/study/:deckName" element={<StudyPage />} />
         </Routes>
 
+
+
         <div className={styles.errorMessages}>
           {showNameTooLongMessage &&
-            <p>Error: Deck name must be shorter than 25 charecters</p>
-          }
-          {!deckName &&
-            <p>Error: Deck name cannot be blank.</p>
+            <p>Error - <br /> Deck name must be between 5 and 25 characters <br /> Current length - {deckName.length}</p>
           }
         </div>
+
 
 
       </div>
