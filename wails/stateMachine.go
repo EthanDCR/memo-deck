@@ -11,10 +11,12 @@ type ClientObject struct {
 	Action string `json:"action"`
 }
 
-type CurrentValues struct {
-	//TODO
-	//work on this step next !!!
-}
+//after the stuff below lets do some type of progress bar and mesure how well
+//someone knows their deck
+//
+//get length of flashcards(deck)
+//then basically based on n (the action) move the current card to current
+//index + n (action) then load deck client side
 
 func (*App) UpdateState(input string) {
 

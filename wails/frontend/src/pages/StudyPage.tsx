@@ -89,7 +89,7 @@ export default function StudyPage() {
       {!loading && (
         <div className={styles.card}>
           <h2>{cardSide.toUpperCase()} #{cardIndex + 1}: <br /><br /> {deck?.flashCards?.[cardIndex]?.[cardSide]} </h2>
-          {(cardSide === 'question' ? <button onClick={() => setCardSide('answer')}>Reveal answer</button> :
+          {(cardSide === 'question' ? <button className={styles.answerBtn} onClick={() => setCardSide('answer')}>Reveal answer</button> :
             <div className={styles.inputBtns}>
               <button onClick={() => handleNext("again")}>Again 🔁 </button>
               <button onClick={() => handleNext("hard")}>Hard 😬 </button>

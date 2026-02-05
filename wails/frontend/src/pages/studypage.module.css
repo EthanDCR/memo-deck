@@ -92,9 +92,13 @@
 }
 
 .inputBtns{
- padding-top: 100px;
+ padding-top: 20px;
   display: flex;
   gap:15px;
+}
+
+.inputBtns button {
+  min-height: 100px;
 }
 
 .editBtn{
@@ -117,4 +121,12 @@
     padding: 8px;
     resize: vertical;
   }
+
+.answerBtn {
+min-height: 150px;
+width: 500px;
+}
+
+
+
 
