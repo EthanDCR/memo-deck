@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import { GetDeck } from "../../wailsjs/go/main/App"
+import { main } from "../../wailsjs/go/models"
+import { EditCard, GetDeck } from "../../wailsjs/go/main/App"
 import styles from "../pages/studypage.module.css"
 import { UpdateState } from "../../wailsjs/go/main/App"
 
@@ -15,11 +16,13 @@ interface ClientObject {
 
 export default function StudyPage() {
   const { deckName } = useParams()
-  const [deck, setDeck] = useState<any>()
+  const [deck, setDeck] = useState<main.Deck>()
   const [loading, setLoading] = useState(true)
   const [cardIndex, setCardIndex] = useState<number>(0)
   const [cardSide, setCardSide] = useState<Side>('question')
   const [deckNameTrimmed, setDeckNameTrimmed] = useState<any>("")
+  const [cardEditMode, setCardEditMode] = useState<boolean>(false)
+  const [editedCardValue, setEditedCardValue] = useState<string>("")
 
   useEffect(() => {
     setDeckNameTrimmed(deckName?.replace(/-/g, "  "))
@@ -30,6 +33,7 @@ export default function StudyPage() {
       if (deckName) {
         const deck = await GetDeck(deckName)
         setDeck(deck)
+        console.log(deck)
         setLoading(false)
         console.log("Loaded deck:", deck.name, deck.flashCards, deck.ID, deck.Created_at)
       }
@@ -37,7 +41,7 @@ export default function StudyPage() {
     loadDeck()
   }, [deckName])
 
-  if (loading) {
+  if (loading || !deck) {
     return <div>Loading deck {deckName}...</div>
   }
 
@@ -62,6 +66,14 @@ export default function StudyPage() {
     UpdateState(jsonData)
   }
 
+  const handleEdit = () => {
+    setCardEditMode((prev) => !prev)
+  }
+
+  const submitEdit = () => {
+    const testing = EditCard(deck?.name, deck?.flashCards[cardIndex]?.id, editedCardValue)
+    console.log(testing)
+  }
 
   return (
     <div className={styles.page}>
@@ -79,6 +91,20 @@ export default function StudyPage() {
               <button onClick={() => handleNext("hard")}>Hard 😬 </button>
               <button onClick={() => handleNext("good")}>Good ✅ </button>
               <button onClick={() => handleNext("easy")}>Easy 😎</button>
+            </div>
+          )}
+
+          {!cardEditMode ? (
+            <div className={styles.editBtn}>
+              <button onClick={handleEdit}>Edit this Card</button> </div>
+          ) : (
+            <div className={styles.editBtn}>
+              <textarea onChange={(e) => setEditedCardValue(e.target.value)} placeholder="Enter text to replace current"></textarea>
+              <div>
+                <button onClick={() => submitEdit()}> Save changes</button>
+                <button onClick={handleEdit}>Discard</button>
+              </div>
+
             </div>
           )}
         </div>
