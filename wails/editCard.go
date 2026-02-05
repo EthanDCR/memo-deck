@@ -7,9 +7,10 @@ import (
 	"path/filepath"
 )
 
-func (a *App) EditCard(deckName string, cardId string, newAnswer string) (string, error) {
+func (a *App) EditCard(deckName string, cardId string, cardSide string, newAnswer string) (string, error) {
 
-	fmt.Printf("EditCard called!: we got: \n %v \n %v \n %v \n ", deckName, cardId, newAnswer)
+	fmt.Printf("EditCard called!: we got: \n %v \n %v \n %v \n  %v \n ", deckName, cardId, newAnswer, cardSide)
+	fmt.Printf("\n----------- cardside: %v ------------- \n", cardSide)
 
 	configDir, err := os.UserConfigDir()
 	if err != nil {
@@ -30,7 +31,14 @@ func (a *App) EditCard(deckName string, cardId string, newAnswer string) (string
 	found := false
 	for i := range deck.FlashCards {
 		if deck.FlashCards[i].ID == cardId {
-			deck.FlashCards[i].Back = newAnswer
+
+			switch cardSide {
+			case "question":
+				deck.FlashCards[i].Front = newAnswer
+			case "answer":
+				deck.FlashCards[i].Back = newAnswer
+			}
+
 			fmt.Printf("Match found. \n Provided id: %s \n id found: %s", cardId, deck.FlashCards[i].Back)
 			found = true
 			break

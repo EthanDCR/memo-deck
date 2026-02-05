@@ -28,16 +28,17 @@ export default function StudyPage() {
     setDeckNameTrimmed(deckName?.replace(/-/g, "  "))
   }, []);
 
-  useEffect(() => {
-    const loadDeck = async () => {
-      if (deckName) {
-        const deck = await GetDeck(deckName)
-        setDeck(deck)
-        console.log(deck)
-        setLoading(false)
-        console.log("Loaded deck:", deck.name, deck.flashCards, deck.ID, deck.Created_at)
-      }
+  const loadDeck = async () => {
+    if (deckName) {
+      const deck = await GetDeck(deckName)
+      setDeck(deck)
+      console.log(deck)
+      setLoading(false)
+      console.log("Loaded deck:", deck.name, deck.flashCards, deck.ID, deck.Created_at)
     }
+  }
+
+  useEffect(() => {
     loadDeck()
   }, [deckName])
 
@@ -70,9 +71,12 @@ export default function StudyPage() {
     setCardEditMode((prev) => !prev)
   }
 
-  const submitEdit = () => {
-    const testing = EditCard(deck?.name, deck?.flashCards[cardIndex]?.id, editedCardValue)
+  const submitEdit = async () => {
+    console.log("current card side: " + cardSide)
+    const testing = await EditCard(deck?.name, deck?.flashCards[cardIndex]?.id, cardSide, editedCardValue)
     console.log(testing)
+    setCardEditMode((prev) => !prev)
+    await loadDeck()
   }
 
   return (
@@ -101,7 +105,7 @@ export default function StudyPage() {
             <div className={styles.editBtn}>
               <textarea onChange={(e) => setEditedCardValue(e.target.value)} placeholder="Enter text to replace current"></textarea>
               <div>
-                <button onClick={() => submitEdit()}> Save changes</button>
+                <button onClick={() => submitEdit()}>Save changes</button>
                 <button onClick={handleEdit}>Discard</button>
               </div>
 
