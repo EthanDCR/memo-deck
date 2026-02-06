@@ -12,6 +12,7 @@ interface ClientObject {
   deckId: string,
   cardId: string,
   action: string,
+  index: number,
 }
 
 export default function StudyPage() {
@@ -46,7 +47,6 @@ export default function StudyPage() {
     return <div>Loading deck {deckName}...</div>
   }
 
-
   const handleNext = (btnInput: BtnInput) => {
 
     if (cardIndex >= deck.flashCards.length - 1) {
@@ -62,8 +62,10 @@ export default function StudyPage() {
       deckId: deck.ID,
       cardId: deck.flashCards[cardIndex].id,
       action: btnInput,
+      index: cardIndex,
     }
     const jsonData = JSON.stringify(data)
+    console.log(`btn input: ${btnInput}`)
     UpdateState(jsonData)
   }
 

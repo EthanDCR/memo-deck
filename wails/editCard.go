@@ -9,9 +9,6 @@ import (
 
 func (a *App) EditCard(deckName string, cardId string, cardSide string, newAnswer string) (string, error) {
 
-	fmt.Printf("EditCard called!: we got: \n %v \n %v \n %v \n  %v \n ", deckName, cardId, newAnswer, cardSide)
-	fmt.Printf("\n----------- cardside: %v ------------- \n", cardSide)
-
 	configDir, err := os.UserConfigDir()
 	if err != nil {
 		return "", err
