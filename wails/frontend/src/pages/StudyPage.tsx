@@ -5,6 +5,7 @@ import { EditCard, GetDeck } from "../../wailsjs/go/main/App"
 import styles from "../pages/studypage.module.css"
 import { UpdateState } from "../../wailsjs/go/main/App"
 
+
 type Side = 'question' | 'answer'
 type BtnInput = 'again' | 'hard' | 'good' | 'easy'
 
@@ -25,6 +26,9 @@ export default function StudyPage() {
   const [deckNameTrimmed, setDeckNameTrimmed] = useState<any>("")
   const [cardEditMode, setCardEditMode] = useState<boolean>(false)
   const [editedCardValue, setEditedCardValue] = useState<string>("")
+  const [progress, setProgress] = useState<number>(0)
+  const [maxProgress, setMaxProgress] = useState<number>()
+
 
   useEffect(() => {
     setDeckNameTrimmed(deckName?.replace(/-/g, "  "))
@@ -37,6 +41,14 @@ export default function StudyPage() {
       console.log(deck)
       setLoading(false)
       console.log("Loaded deck:", deck.name, deck.flashCards, deck.ID, deck.Created_at)
+
+      let currentProgress: number = 0
+      for (let i = 0; i < deck.flashCards.length; i++) {
+        currentProgress += deck.flashCards[i].points
+      }
+      setProgress(currentProgress)
+      setMaxProgress(deck.flashCards.length * 20)
+
     }
   }
 
@@ -48,7 +60,7 @@ export default function StudyPage() {
     return <div>Loading deck {deckName}...</div>
   }
 
-  const handleNext = (btnInput: BtnInput) => {
+  const handleNext = async (btnInput: BtnInput) => {
 
     let points = 0
     switch (btnInput) {
@@ -77,6 +89,7 @@ export default function StudyPage() {
     console.log(`btn input: ${btnInput}`)
     UpdateState(jsonData)
 
+    await loadDeck()
     if (cardIndex >= deck.flashCards.length - 1) {
       setCardIndex(0)
       setCardSide('question')
@@ -120,6 +133,7 @@ export default function StudyPage() {
               <button onClick={() => handleNext("good")}>Good ✅ </button>
               <button onClick={() => handleNext("easy")}>Easy 😎</button>
             </div>
+
           )}
 
           {!cardEditMode ? (
@@ -130,15 +144,17 @@ export default function StudyPage() {
               <textarea onChange={(e) => setEditedCardValue(e.target.value)} placeholder="Enter text to replace current"></textarea>
               <div>
                 <button onClick={() => submitEdit()}>Save changes</button>
-                <button onClick={handleEdit}>Discard</button>
+                <button onClick={handleEdit}>Cancel</button>
               </div>
-
             </div>
           )}
         </div>
       )
       }
-
+      <div className={styles.masterySection}>
+        <h4>MASTERY METER</h4>
+        <progress className={styles.progressBar} value={progress} max={maxProgress} />
+      </div>
     </div >
 
   )

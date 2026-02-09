@@ -137,3 +137,25 @@ gap: 20px;
 height: 45px;
 margin-top: 30px;
 }
+
+
+  .progressBar {
+    width: 200%;
+    height: 30px;
+    appearance: none;
+    border-radius: 10px;
+  }
+
+  .progressBar::-webkit-progress-bar {
+    background-color: #green;
+    border-radius: 5px;
+  }
+
+.masterySection {
+  background-color: black;
+  padding-right: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+
