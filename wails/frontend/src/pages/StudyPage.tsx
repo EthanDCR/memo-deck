@@ -4,7 +4,6 @@ import { main } from "../../wailsjs/go/models"
 import { EditCard, GetDeck, ResetProgress } from "../../wailsjs/go/main/App"
 import styles from "../pages/studypage.module.css"
 import { UpdateState } from "../../wailsjs/go/main/App"
-import { json } from "node:stream/consumers"
 
 
 type Side = 'question' | 'answer'
@@ -119,6 +118,7 @@ export default function StudyPage() {
     console.log(deck.name)
     const resetResult = await ResetProgress(deck.name)
     console.log(`reset result: ${resetResult}\n`)
+    await loadDeck()
   }
 
   return (
@@ -159,6 +159,10 @@ export default function StudyPage() {
       <div className={styles.masterySection}>
         <h4>MASTERY METER</h4>
         <progress className={styles.progressBar} value={progress} max={maxProgress} />
+        <div className={styles.cooked}>
+          <p>Cooked</p>
+          <p>Light Work</p>
+        </div>
       </div>
     </div >
 

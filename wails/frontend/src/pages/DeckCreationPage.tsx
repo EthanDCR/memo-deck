@@ -47,7 +47,6 @@ export default function DeckCreationPage({
             </div>
           </div>
         </div>
-
         <div className={styles.rightColumn}>
           <div className={styles.notesInput}>
             <div className={styles.sectionHeader}>Context (Optional)</div>
@@ -60,7 +59,12 @@ export default function DeckCreationPage({
             ></textarea>
           </div>
         </div>
+
       </div>
+      <h3>Use your own api key for faster deck generation</h3>
+      <input type="text" placeholder='enter key here' />
+      <button>Save Key</button>
+      <p>note - your key will be stored on your local machine under .confi/memoDeck/keys.json < br /> This key will never be sent anywhere or leave your machine</p>
     </div>
   );
 }
