@@ -49,17 +49,8 @@ export default function StudyPage() {
 
   const handleNext = (btnInput: BtnInput) => {
 
-    if (cardIndex >= deck.flashCards.length - 1) {
-      setCardIndex(0)
-      setCardSide('question')
-      return
-    } else {
-      setCardIndex(cardIndex + 1)
-      setCardSide('question')
-    }
-
     const data: ClientObject = {
-      deckId: deck.ID,
+      deckId: deck.name,
       cardId: deck.flashCards[cardIndex].id,
       action: btnInput,
       index: cardIndex,
@@ -67,6 +58,14 @@ export default function StudyPage() {
     const jsonData = JSON.stringify(data)
     console.log(`btn input: ${btnInput}`)
     UpdateState(jsonData)
+
+    if (cardIndex >= deck.flashCards.length - 1) {
+      setCardIndex(0)
+      setCardSide('question')
+    } else {
+      setCardIndex(cardIndex + 1)
+      setCardSide('question')
+    }
   }
 
   const handleEdit = () => {
@@ -81,10 +80,15 @@ export default function StudyPage() {
     await loadDeck()
   }
 
+  const reset = () => {
+    setCardIndex(0)
+    setCardSide("question")
+  }
+
   return (
     <div className={styles.page}>
       <div className={styles.header}>
-        <h2>Studying: {deckNameTrimmed}</h2>
+        <div className={styles.headNstudy}><h2>Studying: {deckNameTrimmed}</h2><button onClick={reset}>Reset 🔄</button></div>
         <p>Cards: {deck?.flashCards?.length || 0}</p>
       </div>
 

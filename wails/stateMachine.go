@@ -5,19 +5,16 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strconv"
-
-	"github.com/wailsapp/wails/v2/pkg/menu/keys"
 )
 
-//after the stuff below lets do some type of progress bar and mesure how well
+//after the stuff below do some type of progress bar and mesure how well
 //someone knows their deck
 
 type ClientObject struct {
 	DeckName string `json:"deckId"`
 	CardId   string `json:"cardId"`
 	Action   string `json:"action"`
-	Index    string `json:"index"`
+	Index    int    `json:"index"`
 }
 
 func (*App) UpdateState(input string) (string, error) {
@@ -64,19 +61,14 @@ func (*App) UpdateState(input string) (string, error) {
 
 	var deck = Deck{}
 	json.Unmarshal(deckBytes, &deck)
-
-	currentIndex, err := strconv.Atoi(obj.Index)
-	if err != nil {
-		return "error converting string from client into int (index): ", err
-	}
+	currentIndex := obj.Index
 
 	var newSlice []FlashCard
 	temp := deck.FlashCards[currentIndex]
 
 	newSlice = deck.FlashCards[:currentIndex]
 	newSlice = append(newSlice, deck.FlashCards[currentIndex+1:]...)
-	indexToInt, err := strconv.Atoi(obj.Index)
-	targetIndex := indexToInt + action
+	targetIndex := currentIndex + action
 
 	if targetIndex > len(newSlice) {
 		targetIndex = len(newSlice)
@@ -101,5 +93,6 @@ func (*App) UpdateState(input string) (string, error) {
 		return "error updating file", err
 	}
 
+	fmt.Printf("updated file.")
 	return "file updated successfully ", nil
 }

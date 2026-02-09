@@ -127,6 +127,13 @@ min-height: 150px;
 width: 500px;
 }
 
+.headNstudy{
+display: flex;
+align-items: center;
+gap: 20px;
+}
 
-
-
+.headNstudy button {
+height: 45px;
+margin-top: 30px;
+}
