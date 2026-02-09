@@ -22,6 +22,10 @@ export function Greet(arg1) {
   return window['go']['main']['App']['Greet'](arg1);
 }
 
+export function ResetProgress(arg1) {
+  return window['go']['main']['App']['ResetProgress'](arg1);
+}
+
 export function SendContext(arg1) {
   return window['go']['main']['App']['SendContext'](arg1);
 }

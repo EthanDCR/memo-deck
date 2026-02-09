@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { main } from "../../wailsjs/go/models"
-import { EditCard, GetDeck } from "../../wailsjs/go/main/App"
+import { EditCard, GetDeck, ResetProgress } from "../../wailsjs/go/main/App"
 import styles from "../pages/studypage.module.css"
 import { UpdateState } from "../../wailsjs/go/main/App"
+import { json } from "node:stream/consumers"
 
 
 type Side = 'question' | 'answer'
@@ -111,9 +112,13 @@ export default function StudyPage() {
     await loadDeck()
   }
 
-  const reset = () => {
+  const reset = async () => {
     setCardIndex(0)
     setCardSide("question")
+
+    console.log(deck.name)
+    const resetResult = await ResetProgress(deck.name)
+    console.log(`reset result: ${resetResult}\n`)
   }
 
   return (
