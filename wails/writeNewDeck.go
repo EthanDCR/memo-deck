@@ -19,10 +19,11 @@ type Deck struct {
 }
 
 type FlashCard struct {
-	Front string `json:"question"`
-	Back  string `json:"answer"`
-	ID    string `json:"id"`
-	DueAt int64  `json:"dueAt"`
+	Front  string `json:"question"`
+	Back   string `json:"answer"`
+	ID     string `json:"id"`
+	DueAt  int64  `json:"dueAt"`
+	Points int    `json:"points"`
 }
 
 func extractFlashcards(content string) ([]FlashCard, error) {

@@ -14,6 +14,7 @@ type ClientObject struct {
 	DeckName string `json:"deckId"`
 	CardId   string `json:"cardId"`
 	Action   string `json:"action"`
+	Points   int    `json:"points"`
 	Index    int    `json:"index"`
 }
 
@@ -27,22 +28,6 @@ func (*App) UpdateState(input string) (string, error) {
 	}
 
 	fmt.Printf("Updating state for %s\n action: %s\n cardId: %s\n", obj.DeckName, obj.Action, obj.CardId)
-
-	var action int
-	switch obj.Action {
-	case "again":
-		action = 0
-		break
-	case "hard":
-		action = 2
-		break
-	case "good":
-		action = 5
-		break
-	case "easy":
-		action = 10
-		break
-	}
 
 	configDir, err := os.UserConfigDir()
 	if err != nil {
@@ -65,14 +50,13 @@ func (*App) UpdateState(input string) (string, error) {
 
 	var newSlice []FlashCard
 	temp := deck.FlashCards[currentIndex]
+	temp.Points = obj.Points
 
 	newSlice = deck.FlashCards[:currentIndex]
 	newSlice = append(newSlice, deck.FlashCards[currentIndex+1:]...)
-	targetIndex := currentIndex + action
+	targetIndex := currentIndex + obj.Points
 
-	if targetIndex > len(newSlice) {
-		targetIndex = len(newSlice)
-	}
+	targetIndex = min(targetIndex, len(newSlice))
 
 	left := newSlice[:targetIndex]
 	right := newSlice[targetIndex:]

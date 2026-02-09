@@ -12,6 +12,7 @@ interface ClientObject {
   deckId: string,
   cardId: string,
   action: string,
+  points: number,
   index: number,
 }
 
@@ -49,10 +50,27 @@ export default function StudyPage() {
 
   const handleNext = (btnInput: BtnInput) => {
 
+    let points = 0
+    switch (btnInput) {
+      case "again":
+        points = 0
+        break
+      case "hard":
+        points = 5
+        break
+      case "good":
+        points = 10
+        break
+      case "easy":
+        points = 20
+        break
+    }
+
     const data: ClientObject = {
       deckId: deck.name,
       cardId: deck.flashCards[cardIndex].id,
       action: btnInput,
+      points: points,
       index: cardIndex,
     }
     const jsonData = JSON.stringify(data)

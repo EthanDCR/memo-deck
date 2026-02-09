@@ -23,6 +23,7 @@ export namespace main {
 	    answer: string;
 	    id: string;
 	    dueAt: number;
+	    points: number;
 	
 	    static createFrom(source: any = {}) {
 	        return new FlashCard(source);
@@ -34,6 +35,7 @@ export namespace main {
 	        this.answer = source["answer"];
 	        this.id = source["id"];
 	        this.dueAt = source["dueAt"];
+	        this.points = source["points"];
 	    }
 	}
 	export class Deck {
