@@ -14,6 +14,8 @@ export function Greet(arg1:string):Promise<string>;
 
 export function ResetProgress(arg1:string):Promise<string>;
 
+export function SaveKey(arg1:string):Promise<string>;
+
 export function SendContext(arg1:main.Context):Promise<string>;
 
 export function UpdateState(arg1:string):Promise<string>;

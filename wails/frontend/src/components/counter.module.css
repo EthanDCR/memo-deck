@@ -1,7 +1,7 @@
 .counter {
     background-color: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    border-radius: 10px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -20,7 +20,7 @@
     background-color: var(--bg-secondary);
     color: var(--text-primary);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
     transition: all 0.15s ease;
 }

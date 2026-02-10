@@ -1,7 +1,8 @@
 import styles from './deckCreationPage.module.css';
 import FileGrid from '../components/FileGrid';
 import Counter from '../components/Counter';
-
+import altman from '../assets/images/altman.jpg'
+import { useState } from 'react';
 
 interface DeckCreationPageProps {
   files: string[];
@@ -24,6 +25,13 @@ export default function DeckCreationPage({
   onCountChange,
   onSubmit
 }: DeckCreationPageProps) {
+  const [showAltman, setShowAltman] = useState<boolean>(false);
+
+
+  const saveKey = () => {
+
+  }
+
 
   return (
     <div className={styles.page}>
@@ -46,7 +54,21 @@ export default function DeckCreationPage({
               <button onClick={onSubmit} className={styles.contextBtn}>Generate cards</button>
             </div>
           </div>
+
+          <div className={styles.apiKeySection}>
+            <h3>Use a third party API for faster generation times</h3>
+            <div className={styles.apiKeyInput}>
+              <input type="text" placeholder="Enter API key here" />
+              <button onClick={() => saveKey()}>Save Key</button>
+            </div>
+            <p className={styles.apiKeyNote}>
+              Note: Your key will be stored on your local machine under .config/memoDeck/keys.json
+              <br />
+              This key will never be sent anywhere or leave your machine
+            </p>
+          </div>
         </div>
+
         <div className={styles.rightColumn}>
           <div className={styles.notesInput}>
             <div className={styles.sectionHeader}>Context (Optional)</div>
@@ -61,10 +83,11 @@ export default function DeckCreationPage({
         </div>
 
       </div>
-      <h3>Use your own api key for faster deck generation</h3>
-      <input type="text" placeholder='enter key here' />
-      <button>Save Key</button>
-      <p>note - your key will be stored on your local machine under .confi/memoDeck/keys.json < br /> This key will never be sent anywhere or leave your machine</p>
+
+      {showAltman &&
+        <img src={altman} alt="altman" style={{ width: '500px', marginTop: '1rem' }} />
+      }
+
     </div>
   );
 }

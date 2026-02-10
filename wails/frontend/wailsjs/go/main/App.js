@@ -26,6 +26,10 @@ export function ResetProgress(arg1) {
   return window['go']['main']['App']['ResetProgress'](arg1);
 }
 
+export function SaveKey(arg1) {
+  return window['go']['main']['App']['SaveKey'](arg1);
+}
+
 export function SendContext(arg1) {
   return window['go']['main']['App']['SendContext'](arg1);
 }

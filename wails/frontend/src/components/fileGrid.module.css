@@ -21,7 +21,7 @@
 .filesGrid div {
     background-color: rgba(53, 40, 68, 0.15);
     padding: 0.875rem 1.25rem;
-    border-radius: 25px;
+    border-radius: 8px;
     border: 1px solid var(--border-color);
     color: var(--text-secondary);
     font-size: 0.875rem;
