@@ -3,6 +3,7 @@ import FileGrid from '../components/FileGrid';
 import Counter from '../components/Counter';
 import altman from '../assets/images/altman.jpg'
 import { useState } from 'react';
+import { SaveKey } from '../../wailsjs/go/main/App';
 
 interface DeckCreationPageProps {
   files: string[];
@@ -26,10 +27,11 @@ export default function DeckCreationPage({
   onSubmit
 }: DeckCreationPageProps) {
   const [showAltman, setShowAltman] = useState<boolean>(false);
+  const [key, setKey] = useState<string>("")
 
-
-  const saveKey = () => {
-
+  const saveKey = async () => {
+    const res = await SaveKey(key)
+    console.log(res)
   }
 
 
@@ -58,7 +60,7 @@ export default function DeckCreationPage({
           <div className={styles.apiKeySection}>
             <h3>Use a third party API for faster generation times</h3>
             <div className={styles.apiKeyInput}>
-              <input type="text" placeholder="Enter API key here" />
+              <input onChange={(e) => setKey(e.target.value)} type="text" placeholder="Enter API key here" />
               <button onClick={() => saveKey()}>Save Key</button>
             </div>
             <p className={styles.apiKeyNote}>

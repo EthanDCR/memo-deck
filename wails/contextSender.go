@@ -37,6 +37,10 @@ type ChatResponse struct {
 	Done           bool    `json:"done"`
 }
 
+func checkConfig() (bool, string) {
+	return true, ""
+}
+
 func (a *App) SendContext(ctx Context) (message string) {
 
 	if len(ctx.Files) <= 0 {
