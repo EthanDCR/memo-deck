@@ -12,7 +12,7 @@ func GetSystemPrompt(count int) (string, error) {
 
 	return fmt.Sprintf(`Act as a JSON API server.
 Input: Text or Image data.
-Output: A JSON array containing exactly %d objects.
+Output: A JSON array containing exactly %d FlashCards.
 
 Format:
 [
