@@ -9,9 +9,10 @@ import (
 
 type UserConfig struct {
 	OpenAIKey string
+	Provider  string
 }
 
-func (a *App) SaveKey(key string) string {
+func (a *App) SaveKey(key string, provider string) string {
 	configDir, err := os.UserConfigDir()
 	if err != nil {
 		return fmt.Sprintf("Couldn't get user config directory\n error: %v\n", err)
@@ -19,7 +20,7 @@ func (a *App) SaveKey(key string) string {
 	fileName := "keys.json"
 	fullFilePath := filepath.Join(configDir, "memoDeck", "keys", fileName)
 
-	thisConfig := UserConfig{OpenAIKey: key}
+	thisConfig := UserConfig{OpenAIKey: key, Provider: provider}
 
 	configJson, err := json.MarshalIndent(thisConfig, "", "  ")
 	if err != nil {

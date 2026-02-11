@@ -29,6 +29,7 @@ export default function DeckCreationPage({
   const [showAltman, setShowAltman] = useState<boolean>(false);
   const [key, setKey] = useState<string>("")
   const [hasKey, setHasKey] = useState<boolean>(false)
+  const [provider, setProvider] = useState<string>("")
 
   useEffect(() => {
     findKey()
@@ -43,7 +44,7 @@ export default function DeckCreationPage({
   }
 
   const saveKey = async () => {
-    const res = await SaveKey(key)
+    const res = await SaveKey(key, provider)
     console.log(`saveKey res: ${res}`)
     if (res == "success") {
       setHasKey(true)
@@ -85,10 +86,18 @@ export default function DeckCreationPage({
           {!hasKey ?
             <div className={styles.apiKeySection}>
               <h3>Use a third party API for faster generation times</h3>
+
+              <label>Select your api provider:</label>
+              <select onChange={(e) => setProvider(e.target.value)}>
+                <option>OpenAi</option>
+                <option>openrouter</option>
+              </select>
+
               <div className={styles.apiKeyInput}>
                 <input onChange={(e) => setKey(e.target.value)} type="text" placeholder="Enter API key here" />
-                <button onClick={() => saveKey()}>Save Key</button>
               </div>
+
+              <button onClick={() => saveKey()}>Save Key</button>
               <p className={styles.apiKeyNote}>
                 Note: Your key will be stored on your local machine under .config/memoDeck/keys.json
                 <br />
@@ -97,7 +106,7 @@ export default function DeckCreationPage({
             </div>
             :
             <div className={styles.apiKeySection}>
-              <h3>You are currently using a third party api provider</h3>
+              <h3>You are currently using a third party llm for card generation</h3>
               <div className={styles.apiKeyInput}>
                 <button onClick={() => revertModel()}>Return to local model</button>
               </div>

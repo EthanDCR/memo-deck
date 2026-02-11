@@ -34,8 +34,8 @@ export function RevertModel() {
   return window['go']['main']['App']['RevertModel']();
 }
 
-export function SaveKey(arg1) {
-  return window['go']['main']['App']['SaveKey'](arg1);
+export function SaveKey(arg1, arg2) {
+  return window['go']['main']['App']['SaveKey'](arg1, arg2);
 }
 
 export function SendContext(arg1) {

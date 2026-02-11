@@ -162,12 +162,25 @@ func (a *App) SendContext(ctx Context) (message string) {
 		var userConf UserConfig
 		err = json.Unmarshal(fileBytes, &userConf)
 
-		client := openai.NewClient(
-			option.WithAPIKey(userConf.OpenAIKey),
-		)
+		var client openai.Client
+		var modelName shared.ChatModel
+
+		// Configure client and model based on provider
+		if userConf.Provider == "openrouter" {
+			client = openai.NewClient(
+				option.WithAPIKey(userConf.OpenAIKey),
+				option.WithBaseURL("https://openrouter.ai/api/v1"),
+			)
+			modelName = shared.ChatModel("openai/gpt-oss-120b:free")
+		} else {
+			client = openai.NewClient(
+				option.WithAPIKey(userConf.OpenAIKey),
+			)
+			modelName = shared.ChatModelGPT4o
+		}
 
 		params := openai.ChatCompletionNewParams{
-			Model: shared.ChatModelGPT4o,
+			Model: modelName,
 			Messages: []openai.ChatCompletionMessageParamUnion{
 				// dev instructions for the model
 				{

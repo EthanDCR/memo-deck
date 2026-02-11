@@ -16,7 +16,7 @@ import studyGuyLogo from "./assets/images/studyGuy.png"
 function AppContent() {
   const [notes, setNotes] = useState<string>("")
   const [files, setFiles] = useState<string[]>([])
-  const [count, setCount] = useState<number>(10)
+  const [count, setCount] = useState<number>(30)
   const [deckName, setDeckName] = useState<string>("")
   const navigate = useNavigate()
   const [loading, setLoading] = useState<boolean>(false)
