@@ -2,8 +2,8 @@ import styles from './deckCreationPage.module.css';
 import FileGrid from '../components/FileGrid';
 import Counter from '../components/Counter';
 import altman from '../assets/images/altman.jpg'
-import { useState } from 'react';
-import { SaveKey } from '../../wailsjs/go/main/App';
+import { useEffect, useState } from 'react';
+import { CheckKey, RevertModel, SaveKey } from '../../wailsjs/go/main/App';
 
 interface DeckCreationPageProps {
   files: string[];
@@ -28,12 +28,33 @@ export default function DeckCreationPage({
 }: DeckCreationPageProps) {
   const [showAltman, setShowAltman] = useState<boolean>(false);
   const [key, setKey] = useState<string>("")
+  const [hasKey, setHasKey] = useState<boolean>(false)
+
+  useEffect(() => {
+    findKey()
+  }, [])
+
+  const findKey = async () => {
+    const res = await CheckKey()
+    console.log(`res to findKey: ${res}`)
+    if (res == true) {
+      setHasKey(true)
+    }
+  }
 
   const saveKey = async () => {
     const res = await SaveKey(key)
     console.log(res)
   }
 
+  const revertModel = async () => {
+    console.log(`attempting to remove private key and revert model`)
+    const res = await RevertModel()
+    console.log(res)
+    if (res == "removed") {
+      setHasKey(false)
+    }
+  }
 
   return (
     <div className={styles.page}>
@@ -57,18 +78,32 @@ export default function DeckCreationPage({
             </div>
           </div>
 
-          <div className={styles.apiKeySection}>
-            <h3>Use a third party API for faster generation times</h3>
-            <div className={styles.apiKeyInput}>
-              <input onChange={(e) => setKey(e.target.value)} type="text" placeholder="Enter API key here" />
-              <button onClick={() => saveKey()}>Save Key</button>
+
+          {!hasKey ?
+            <div className={styles.apiKeySection}>
+              <h3>Use a third party API for faster generation times</h3>
+              <div className={styles.apiKeyInput}>
+                <input onChange={(e) => setKey(e.target.value)} type="text" placeholder="Enter API key here" />
+                <button onClick={() => saveKey()}>Save Key</button>
+              </div>
+              <p className={styles.apiKeyNote}>
+                Note: Your key will be stored on your local machine under .config/memoDeck/keys.json
+                <br />
+                This key will never be sent anywhere or leave your machine
+              </p>
             </div>
-            <p className={styles.apiKeyNote}>
-              Note: Your key will be stored on your local machine under .config/memoDeck/keys.json
-              <br />
-              This key will never be sent anywhere or leave your machine
-            </p>
-          </div>
+            :
+            <div className={styles.apiKeySection}>
+              <h3>You are currently using a third party api provider</h3>
+              <div className={styles.apiKeyInput}>
+                <button onClick={() => revertModel()}>Return to local model</button>
+              </div>
+              <p className={styles.apiKeyNote}>
+                Click here to  remove you private key and revert to the local model.
+              </p>
+            </div>
+          }
+
         </div>
 
         <div className={styles.rightColumn}>
