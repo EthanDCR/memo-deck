@@ -44,7 +44,10 @@ export default function DeckCreationPage({
 
   const saveKey = async () => {
     const res = await SaveKey(key)
-    console.log(res)
+    console.log(`saveKey res: ${res}`)
+    if (res == "success") {
+      setHasKey(true)
+    }
   }
 
   const revertModel = async () => {
