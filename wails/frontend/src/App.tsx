@@ -130,16 +130,9 @@ function AppContent() {
         <div className={styles.createdButtons}>
           <button onClick={() => {
             setDeckCreated(false)
-            navigate(`/study/${deckName}`)
-          }}>Go study {deckName} </button>
-          <button onClick={() => {
-            setDeckCreated(false)
-            navigate('/')
-          }}>Back to library</button>
-          <button onClick={() => {
-            setDeckCreated(false)
-            navigate('/create')
-          }}>Create another deck</button>
+            setFiles([])
+            navigate('/library')
+          }}>Go to library</button>
         </div>
 
       </div>
