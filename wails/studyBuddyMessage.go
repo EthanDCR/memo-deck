@@ -48,8 +48,18 @@ func (a *App) SendStudyBuddyMessage(deckName string, conversationJSON string) st
 		return "error"
 	}
 
-	// Now stream contains your messages array
-	// stream[0].Role, stream[0].Content, etc.
+	// Load the deck to get flashcard context
+	deck, err := a.GetDeck(deckName)
+	if err != nil {
+		fmt.Printf("error loading deck: %v\n", err)
+		return "error"
+	}
+
+	// Build context string from flashcards
+	contextStr := "You are a helpful study buddy. Help the student understand these flashcards:\n\n"
+	for _, card := range deck.FlashCards {
+		contextStr += fmt.Sprintf("Q: %s\nA: %s\n\n", card.Front, card.Back)
+	}
 
 	status, _ := DetectConfig()
 
@@ -69,14 +79,88 @@ func (a *App) SendStudyBuddyMessage(deckName string, conversationJSON string) st
 			return fmt.Sprintf("error unmarshalling configBytes\n error: %v\n", err)
 		}
 
-		switch userConf.Provider {
-		case "openrouter":
-			//openRouter logic here
-		default:
-			//openAi logic here
+		// Create client based on provider
+		var client openai.Client
+		var modelName shared.ChatModel
+
+		if userConf.Provider == "openrouter" {
+			client = openai.NewClient(
+				option.WithAPIKey(userConf.OpenAIKey),
+				option.WithBaseURL("https://openrouter.ai/api/v1"),
+			)
+			modelName = shared.ChatModel("openai/gpt-oss-120b:free")
+		} else {
+			client = openai.NewClient(
+				option.WithAPIKey(userConf.OpenAIKey),
+			)
+			modelName = shared.ChatModelGPT4o
 		}
 
-	}
+		// Build messages array: system message + conversation history
+		messages := []openai.ChatCompletionMessageParamUnion{
+			// System message with deck context
+			{
+				OfSystem: &openai.ChatCompletionSystemMessageParam{
+					Content: openai.ChatCompletionSystemMessageParamContentUnion{
+						OfString: openai.String(contextStr),
+					},
+				},
+			},
+		}
 
-	return ""
+		// Add conversation history
+		for _, msg := range stream {
+			if msg.Role == "user" {
+				messages = append(messages, openai.ChatCompletionMessageParamUnion{
+					OfUser: &openai.ChatCompletionUserMessageParam{
+						Content: openai.ChatCompletionUserMessageParamContentUnion{
+							OfString: openai.String(msg.Content),
+						},
+					},
+				})
+			} else if msg.Role == "assistant" {
+				messages = append(messages, openai.ChatCompletionMessageParamUnion{
+					OfAssistant: &openai.ChatCompletionAssistantMessageParam{
+						Content: openai.ChatCompletionAssistantMessageParamContentUnion{
+							OfString: openai.String(msg.Content),
+						},
+					},
+				})
+			}
+		}
+
+		// Create streaming request
+		params := openai.ChatCompletionNewParams{
+			Model:    modelName,
+			Messages: messages,
+		}
+
+		// Make streaming call
+		stream2 := client.Chat.Completions.NewStreaming(context.TODO(), params)
+
+		// Stream tokens back to frontend
+		for stream2.Next() {
+			chunk := stream2.Current()
+			if len(chunk.Choices) > 0 {
+				token := chunk.Choices[0].Delta.Content
+				// Emit each token to frontend
+				runtime.EventsEmit(a.ctx, "chat-token", token)
+			}
+		}
+
+		if err := stream2.Err(); err != nil {
+			fmt.Printf("error during streaming: %v\n", err)
+			return "error"
+		}
+
+		// Signal streaming is complete
+		runtime.EventsEmit(a.ctx, "chat-done", "")
+		return "success"
+
+	} else {
+		// Ollama local API
+		fmt.Println("Using local Ollama API for study buddy")
+		// TODO: Add Ollama streaming implementation if needed
+		return "Ollama support not yet implemented for study buddy"
+	}
 }
