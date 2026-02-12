@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useParams } from "react-router-dom"
 import { main } from "../../wailsjs/go/models"
 import { EditCard, GetDeck, ResetProgress } from "../../wailsjs/go/main/App"
 import styles from "../pages/studypage.module.css"
 import { UpdateState } from "../../wailsjs/go/main/App"
-import { Context } from "vm"
+import StudyBuddyChat, { StudyBuddyChatRef } from "../components/StudyBuddyChat"
 
 
 type Side = 'question' | 'answer'
@@ -30,9 +30,7 @@ export default function StudyPage() {
   const [editedCardValue, setEditedCardValue] = useState<string>("")
   const [progress, setProgress] = useState<number>(0)
   const [maxProgress, setMaxProgress] = useState<number>()
-
-
-  //  const [chatContext, setChatContext] = useState<Context>()
+  const studyBuddyRef = useRef<StudyBuddyChatRef>(null)
 
 
   useEffect(() => {
@@ -126,6 +124,13 @@ export default function StudyPage() {
     await loadDeck()
   }
 
+  const handleExplainCard = () => {
+    const message = cardSide === 'question'
+      ? "Can you explain this question to me in detail?"
+      : "Can you explain the answer to this question?"
+    studyBuddyRef.current?.sendMessage(message)
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.page}>
@@ -149,7 +154,9 @@ export default function StudyPage() {
 
             {!cardEditMode ? (
               <div className={styles.editBtn}>
-                <button onClick={handleEdit}>Edit this Card</button> </div>
+                <button onClick={handleExplainCard}>Explain this {cardSide}</button>
+                <button onClick={handleEdit}>Edit this Card</button>
+              </div>
             ) : (
               <div className={styles.editBtn}>
                 <textarea onChange={(e) => setEditedCardValue(e.target.value)} placeholder="Enter text to replace current"></textarea>
@@ -172,22 +179,15 @@ export default function StudyPage() {
         </div>
       </div >
 
-      <div className={styles.rightSection}>
-        <div className={styles.chatHeader}>
-          <h3>Study Buddy</h3>
-        </div>
-        <div className={styles.chatMessages}>
-        //render chatmessages here
-        </div>
-        <div className={styles.chatInputContainer}>
-          <input
-            type="text"
-            placeholder="Ask me anything about your study material..."
-            className={styles.chatInput}
-          />
-          <button className={styles.sendBtn}>Send</button>
-        </div>
-      </div>
+      {deck && deck.flashCards?.[cardIndex] && (
+        <StudyBuddyChat
+          ref={studyBuddyRef}
+          deckName={deck.name}
+          currentCard={deck.flashCards[cardIndex]}
+          cardIndex={cardIndex}
+          cardSide={cardSide}
+        />
+      )}
 
     </div>
   )

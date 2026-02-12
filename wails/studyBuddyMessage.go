@@ -39,27 +39,51 @@ import (
 
 type MessageStream []Message
 
-func (a *App) SendStudyBuddyMessage(deckName string, conversationJSON string) string {
-	var stream MessageStream
+type CurrentCardInfo struct {
+	Question string `json:"question"`
+	Answer   string `json:"answer"`
+	Index    int    `json:"index"`
+	Side     string `json:"side"`
+}
 
-	err := json.Unmarshal([]byte(conversationJSON), &stream)
+type ChatPayload struct {
+	DeckName    string          `json:"deckName"`
+	CurrentCard CurrentCardInfo `json:"currentCard"`
+	Messages    []Message       `json:"messages"`
+}
+
+func (a *App) SendStudyBuddyMessage(payloadJSON string) string {
+	var payload ChatPayload
+
+	err := json.Unmarshal([]byte(payloadJSON), &payload)
 	if err != nil {
-		fmt.Printf("error unmarshaling conversation: %v\n", err)
+		fmt.Printf("error unmarshaling payload: %v\n", err)
 		return "error"
 	}
 
 	// Load the deck to get flashcard context
-	deck, err := a.GetDeck(deckName)
+	deck, err := a.GetDeck(payload.DeckName)
 	if err != nil {
 		fmt.Printf("error loading deck: %v\n", err)
 		return "error"
 	}
 
-	// Build context string from flashcards
-	contextStr := "You are a helpful study buddy. Help the student understand these flashcards:\n\n"
-	for _, card := range deck.FlashCards {
-		contextStr += fmt.Sprintf("Q: %s\nA: %s\n\n", card.Front, card.Back)
+	// Build context string with current card highlighted
+	contextStr := fmt.Sprintf(`You are a helpful study buddy. The student is currently viewing card #%d (%s side).
+
+CURRENT CARD (the one they're looking at right now):
+Question: %s
+Answer: %s
+
+All flashcards in this deck:
+
+`, payload.CurrentCard.Index, payload.CurrentCard.Side, payload.CurrentCard.Question, payload.CurrentCard.Answer)
+
+	for i, card := range deck.FlashCards {
+		contextStr += fmt.Sprintf("Card #%d - Q: %s | A: %s\n", i+1, card.Front, card.Back)
 	}
+
+	contextStr += "\nWhen the student asks about 'this card', 'question #X', or similar, they're referring to the CURRENT CARD shown above."
 
 	status, _ := DetectConfig()
 
@@ -109,7 +133,7 @@ func (a *App) SendStudyBuddyMessage(deckName string, conversationJSON string) st
 		}
 
 		// Add conversation history
-		for _, msg := range stream {
+		for _, msg := range payload.Messages {
 			if msg.Role == "user" {
 				messages = append(messages, openai.ChatCompletionMessageParamUnion{
 					OfUser: &openai.ChatCompletionUserMessageParam{
