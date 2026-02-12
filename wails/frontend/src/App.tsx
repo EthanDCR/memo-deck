@@ -22,6 +22,7 @@ function AppContent() {
   const [loading, setLoading] = useState<boolean>(false)
   const [deckCreated, setDeckCreated] = useState<boolean>(false)
   const [showNameTooLongMessage, setNameTooLongMessage] = useState<boolean>(false)
+  const [deckCreationError, setDeckCreationError] = useState<boolean>(false)
 
 
   interface Context {
@@ -95,13 +96,28 @@ function AppContent() {
 
     setLoading(true)
     try {
-      await SendContext(context)
+      const res = await SendContext(context)
+      if (res == "success") {
+        setDeckCreated(true)
+        setLoading(false)
+      } else if (res != "success") {
+        setLoading(false)
+        setDeckCreationError(true)
+        setTimeout(() => {
+          navigate('/create')
+          setDeckCreationError(false)
+        }, 3000)
+      }
     } catch (error) {
-      console.error(error, "error sending context")
-    } finally {
-      setDeckCreated(true)
       setLoading(false)
+      setDeckCreationError(true)
+      setTimeout(() => {
+        navigate('/create')
+        setDeckCreationError(false)
+      }, 3000)
+      console.error(error, "error sending context")
     }
+
 
     console.log("made context object, object: \n" + context.notes, context.files, context.count)
   }
@@ -134,6 +150,11 @@ function AppContent() {
     return (
       <div className={styles.page}>
         <DeckLoading deckName={deckName} />
+        <div className={styles.errorMessages}>
+          {deckCreationError &&
+            <p>Error - <br /> Failed to create deck. Please try again.</p>
+          }
+        </div>
       </div>
     )
   }
@@ -193,8 +214,10 @@ function AppContent() {
           {showNameTooLongMessage &&
             <p>Error - <br /> Deck name must be between 5 and 25 characters <br /> Current length - {deckName.length}</p>
           }
+          {deckCreationError &&
+            <p>Error - <br /> Failed to create deck. Please try again.</p>
+          }
         </div>
-
 
 
       </div>

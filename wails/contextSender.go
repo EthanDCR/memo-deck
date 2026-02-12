@@ -109,7 +109,7 @@ func (a *App) SendContext(ctx Context) (message string) {
 		res, err := http.Post("http://localhost:11434/api/chat", "application/json", bytes.NewBuffer(jsonData))
 		if err != nil {
 			fmt.Printf("Error posting: %v\n", err)
-			return
+			return fmt.Sprintf("Error posting %v\n", err)
 		}
 		defer res.Body.Close()
 
@@ -236,5 +236,5 @@ func (a *App) SendContext(ctx Context) (message string) {
 		return "success"
 
 	}
-	return ""
+	return "error"
 }

@@ -1,7 +1,6 @@
 import styles from './deckCreationPage.module.css';
 import FileGrid from '../components/FileGrid';
 import Counter from '../components/Counter';
-import altman from '../assets/images/altman.jpg'
 import { useEffect, useState } from 'react';
 import { CheckKey, RevertModel, SaveKey } from '../../wailsjs/go/main/App';
 
@@ -132,11 +131,6 @@ export default function DeckCreationPage({
         </div>
 
       </div>
-
-      {showAltman &&
-        <img src={altman} alt="altman" style={{ width: '500px', marginTop: '1rem' }} />
-      }
-
     </div>
   );
 }
