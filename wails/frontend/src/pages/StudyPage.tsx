@@ -124,7 +124,7 @@ export default function StudyPage() {
   return (
     <div className={styles.page}>
       <div className={styles.header}>
-        <div className={styles.headNstudy}><h2>Studying: {deckNameTrimmed}</h2><button onClick={reset}>Reset 🔄</button></div>
+        <div className={styles.headNstudy}><h2>Studying: {deckNameTrimmed}</h2><button onClick={reset}>Reset Progress 🔄</button></div>
         <p>Cards: {deck?.flashCards?.length || 0}</p>
       </div>
 
