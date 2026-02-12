@@ -4,6 +4,7 @@ import { main } from "../../wailsjs/go/models"
 import { EditCard, GetDeck, ResetProgress } from "../../wailsjs/go/main/App"
 import styles from "../pages/studypage.module.css"
 import { UpdateState } from "../../wailsjs/go/main/App"
+import { Context } from "vm"
 
 
 type Side = 'question' | 'answer'
@@ -17,6 +18,7 @@ interface ClientObject {
   index: number,
 }
 
+
 export default function StudyPage() {
   const { deckName } = useParams()
   const [deck, setDeck] = useState<main.Deck>()
@@ -28,6 +30,9 @@ export default function StudyPage() {
   const [editedCardValue, setEditedCardValue] = useState<string>("")
   const [progress, setProgress] = useState<number>(0)
   const [maxProgress, setMaxProgress] = useState<number>()
+
+
+  //  const [chatContext, setChatContext] = useState<Context>()
 
 
   useEffect(() => {
@@ -122,50 +127,69 @@ export default function StudyPage() {
   }
 
   return (
-    <div className={styles.page}>
-      <div className={styles.header}>
-        <div className={styles.headNstudy}><h2>Studying: {deckNameTrimmed}</h2><button onClick={reset}>Reset Progress 🔄</button></div>
-        <p>Cards: {deck?.flashCards?.length || 0}</p>
-      </div>
+    <div className={styles.container}>
+      <div className={styles.page}>
+        <div className={styles.header}>
+          <div className={styles.headNstudy}><h2>Studying: {deckNameTrimmed}</h2><button onClick={reset}>Reset Progress 🔄</button></div>
+          <p>Cards: {deck?.flashCards?.length || 0}</p>
+        </div>
 
-      {!loading && (
-        <div className={styles.card}>
-          <h2>{cardSide.toUpperCase()} #{cardIndex + 1}: <br /><br /> {deck?.flashCards?.[cardIndex]?.[cardSide]} </h2>
-          {(cardSide === 'question' ? <button className={styles.answerBtn} onClick={() => setCardSide('answer')}>Reveal answer</button> :
-            <div className={styles.inputBtns}>
-              <button onClick={() => handleNext("again")}>Again 🔁 </button>
-              <button onClick={() => handleNext("hard")}>Hard 😬 </button>
-              <button onClick={() => handleNext("good")}>Good ✅ </button>
-              <button onClick={() => handleNext("easy")}>Easy 😎</button>
-            </div>
-
-          )}
-
-          {!cardEditMode ? (
-            <div className={styles.editBtn}>
-              <button onClick={handleEdit}>Edit this Card</button> </div>
-          ) : (
-            <div className={styles.editBtn}>
-              <textarea onChange={(e) => setEditedCardValue(e.target.value)} placeholder="Enter text to replace current"></textarea>
-              <div>
-                <button onClick={() => submitEdit()}>Save changes</button>
-                <button onClick={handleEdit}>Cancel</button>
+        {!loading && (
+          <div className={styles.card}>
+            <h2>{cardSide.toUpperCase()} #{cardIndex + 1}: <br /><br /> {deck?.flashCards?.[cardIndex]?.[cardSide]} </h2>
+            {(cardSide === 'question' ? <button className={styles.answerBtn} onClick={() => setCardSide('answer')}>Reveal answer</button> :
+              <div className={styles.inputBtns}>
+                <button onClick={() => handleNext("again")}>Again 🔁 </button>
+                <button onClick={() => handleNext("hard")}>Hard 😬 </button>
+                <button onClick={() => handleNext("good")}>Good ✅ </button>
+                <button onClick={() => handleNext("easy")}>Easy 😎</button>
               </div>
-            </div>
-          )}
+
+            )}
+
+            {!cardEditMode ? (
+              <div className={styles.editBtn}>
+                <button onClick={handleEdit}>Edit this Card</button> </div>
+            ) : (
+              <div className={styles.editBtn}>
+                <textarea onChange={(e) => setEditedCardValue(e.target.value)} placeholder="Enter text to replace current"></textarea>
+                <div>
+                  <button onClick={() => submitEdit()}>Save changes</button>
+                  <button onClick={handleEdit}>Cancel</button>
+                </div>
+              </div>
+            )}
+          </div>
+        )
+        }
+        <div className={styles.masterySection}>
+          <h4>MASTERY METER</h4>
+          <progress className={styles.progressBar} value={progress} max={maxProgress} />
+          <div className={styles.cooked}>
+            <p>Cooked</p>
+            <p>Light Work</p>
+          </div>
         </div>
-      )
-      }
-      <div className={styles.masterySection}>
-        <h4>MASTERY METER</h4>
-        <progress className={styles.progressBar} value={progress} max={maxProgress} />
-        <div className={styles.cooked}>
-          <p>Cooked</p>
-          <p>Light Work</p>
+      </div >
+
+      <div className={styles.rightSection}>
+        <div className={styles.chatHeader}>
+          <h3>Study Buddy</h3>
+        </div>
+        <div className={styles.chatMessages}>
+        //render chatmessages here
+        </div>
+        <div className={styles.chatInputContainer}>
+          <input
+            type="text"
+            placeholder="Ask me anything about your study material..."
+            className={styles.chatInput}
+          />
+          <button className={styles.sendBtn}>Send</button>
         </div>
       </div>
-    </div >
 
+    </div>
   )
 }
 

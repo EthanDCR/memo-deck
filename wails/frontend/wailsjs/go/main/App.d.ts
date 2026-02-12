@@ -22,4 +22,6 @@ export function SaveKey(arg1:string,arg2:string):Promise<string>;
 
 export function SendContext(arg1:main.Context):Promise<string>;
 
+export function SendStudyBuddyMessage(arg1:string,arg2:string):Promise<string>;
+
 export function UpdateState(arg1:string):Promise<string>;

@@ -45,7 +45,7 @@ type ChatResponse struct {
 	Done           bool    `json:"done"`
 }
 
-func detectConfig() (bool, string) {
+func DetectConfig() (bool, string) {
 	configDir, err := os.UserConfigDir()
 	if err != nil {
 		return false, fmt.Sprintf("Error getting user config dir\n error: %v\n", err)
@@ -61,7 +61,7 @@ func detectConfig() (bool, string) {
 
 func (a *App) SendContext(ctx Context) (message string) {
 
-	status, _ := detectConfig()
+	status, _ := DetectConfig()
 
 	switch status {
 	case false:

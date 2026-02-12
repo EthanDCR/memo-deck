@@ -42,6 +42,10 @@ export function SendContext(arg1) {
   return window['go']['main']['App']['SendContext'](arg1);
 }
 
+export function SendStudyBuddyMessage(arg1, arg2) {
+  return window['go']['main']['App']['SendStudyBuddyMessage'](arg1, arg2);
+}
+
 export function UpdateState(arg1) {
   return window['go']['main']['App']['UpdateState'](arg1);
 }
